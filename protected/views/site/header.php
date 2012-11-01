@@ -42,7 +42,7 @@ function admin_refresh() {
     <div class="op">
         你好：<b>admin</b>，欢迎使用<?php echo Yii::app()->name; ?>。
         <a href="#" onclick="admin_refresh();">刷新</a>&nbsp;
-        <a href="/modoer/admin.php?logout=yes" target="_top">退出</a>
+        <a href="<?php echo Yii::app()->createUrl('site/logout'); ?>" target="_top">退出</a>
     </div>
 	<div id="product"><?php echo Yii::app()->name; ?></div>
 	<div id="nav">
