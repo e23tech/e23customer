@@ -1,5 +1,6 @@
 <div class="space">
-	<h1>Welcome!</h1>
+	<h1>欢迎使用<?php echo Yii::app()->name;?></h1>
+	<p>这是一个管理XXXX的系统，使用之前请仔细查看！</p>
 </div>
 <div class="space">
 	<div class="subtitle">后台在线用户</div>

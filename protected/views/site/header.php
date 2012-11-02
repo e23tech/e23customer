@@ -48,14 +48,11 @@ function admin_refresh() {
 	<div id="nav">
     <ul id="menu">
     <li class="selected"><a href="#" onclick="return gotoMenu(this,'site');" onfocus="this.blur()">后台首页</a></li>
-	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'setting');" onfocus="this.blur()">核心设置</a></li>
-	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'website');" onfocus="this.blur()">网站管理</a></li>
-	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'member');" onfocus="this.blur()">会员管理</a></li>
-	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'item');" onfocus="this.blur()">主题管理</a></li>
-	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'product');" onfocus="this.blur()">产品管理</a></li>
-	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'review');" onfocus="this.blur()">点评管理</a></li>
-	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'article');" onfocus="this.blur()">资讯管理</a></li>
-	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'module');" onfocus="this.blur()">模块管理</a></li>
+	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'contract');" onfocus="this.blur()">合同管理</a></li>
+	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'customer');" onfocus="this.blur()">客户管理</a></li>
+	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'query');" onfocus="this.blur()">查询分析</a></li>
+	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'system');" onfocus="this.blur()">系统设置</a></li>
+	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'user');" onfocus="this.blur()">用户管理</a></li>
     </ul>
   </div>
   <div style="clear:both"></div>

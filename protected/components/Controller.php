@@ -21,6 +21,28 @@ class Controller extends CController
 	 */
 	public $breadcrumbs=array();
 
+	public $ecUser = array();
+
+	public function init()
+	{
+		parent::init();
+		if(!Yii::app()->user->isGuest)
+			$this->ecUser = User::model()->findByPk(Yii::app()->user->id);
+	}
+
+	public function beforeAction($action)
+	{
+		if(parent::beforeAction($action))
+		{
+			if($this->action->id == 'menu') $this->layout = '//layouts/menu';
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	/**
 	 * 强制进行登录验证（以下三个方法）
 	 */
