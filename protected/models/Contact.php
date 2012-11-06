@@ -7,10 +7,11 @@
  * @property integer $coid
  * @property integer $cuid
  * @property string $contact
+ * @property string $rank
  * @property string $telephone
  * @property string $email
- * @property integer $type
  * @property string $note
+ * @property integer $status
  */
 class Contact extends CActiveRecord
 {
@@ -41,13 +42,13 @@ class Contact extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('cuid, contact, telephone', 'required'),
-			array('cuid, type', 'numerical', 'integerOnly'=>true),
+			array('cuid, status', 'numerical', 'integerOnly'=>true),
 			array('contact', 'length', 'max'=>20),
-			array('telephone, email', 'length', 'max'=>30),
+			array('rank, telephone, email', 'length', 'max'=>30),
 			array('note', 'length', 'max'=>500),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('coid, cuid, contact, telephone, email, type, note', 'safe', 'on'=>'search'),
+			array('coid, cuid, contact, rank, telephone, email, note, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -59,6 +60,7 @@ class Contact extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'company' => array(self::BELONGS_TO, 'Customer', 'cuid'),
 		);
 	}
 
@@ -73,8 +75,9 @@ class Contact extends CActiveRecord
 			'contact' => '联系人',
 			'telephone' => '联系人电话',
 			'email' => '联系人邮件',
-			'type' => '联系人类型',
+			'rank' => '联系人职务',
 			'note' => '备注',
+			'status' => 'Status',
 		);
 	}
 
@@ -92,13 +95,30 @@ class Contact extends CActiveRecord
 		$criteria->compare('coid',$this->coid);
 		$criteria->compare('cuid',$this->cuid);
 		$criteria->compare('contact',$this->contact,true);
+		$criteria->compare('rank',$this->rank,true);
 		$criteria->compare('telephone',$this->telephone,true);
 		$criteria->compare('email',$this->email,true);
-		$criteria->compare('type',$this->type);
 		$criteria->compare('note',$this->note,true);
+		$criteria->compare('status',$this->status);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	public function beforeSave()
+	{
+		if(parent::beforeSave())
+		{
+			if($this->getIsNewRecord())
+			{
+				$this->status = 1;
+			}
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

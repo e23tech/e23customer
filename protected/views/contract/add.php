@@ -8,17 +8,17 @@
         <table class="maintable" border="0" cellspacing="0" cellpadding="0" id="config1">
             <tbody>
 			<tr>
-                <td width="20%" class="altbg1"><?php echo $form->labelEx($model,'contractno'); ?></td>
+                <td width="20%" class="altbg1 right"><?php echo $form->labelEx($model,'contractno'); ?></td>
                 <td width="*"><?php echo $form->textField($model,'contractno'); ?><?php echo $form->error($model,'contractno'); ?></td>
             </tr>
 
 			<tr>
-				<td class="altbg1" valign="top"><?php echo $form->labelEx($model, 'cuid'); ?></td>
+				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'cuid'); ?></td>
 				<td><?php echo $form->textField($model, 'cuid'); ?><?php echo $form->error($model, 'cuid'); ?></td>
 			</tr>
 
 			<tr>
-				<td class="altbg1" valign="top"><?php echo $form->labelEx($model, 'datesign'); ?></td>
+				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'datesign'); ?></td>
 				<td><?php $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 					'model'=>$model,
 					'attribute'=>'datesign',
@@ -38,17 +38,17 @@
 			</tr>
 
 			<tr>
-				<td class="altbg1" valign="top"><?php echo $form->labelEx($model, 'money'); ?></td>
+				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'money'); ?></td>
 				<td><?php echo $form->textField($model, 'money'); ?><?php echo $form->error($model, 'money'); ?></td>
 			</tr>
 
 			<tr>
-				<td class="altbg1" valign="top"><?php echo $form->labelEx($model, 'coid'); ?></td>
+				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'coid'); ?></td>
 				<td><?php echo $form->textField($model, 'coid'); ?><?php echo $form->error($model, 'coid'); ?></td>
 			</tr>
 
 			<tr>
-				<td class="altbg1" valign="top"><?php echo $form->labelEx($model, 'datestart'); ?></td>
+				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'datestart'); ?></td>
 				<td><?php $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 					'model'=>$model,
 					'attribute'=>'datestart',
@@ -70,7 +70,7 @@
 			</tr>
 
 			<tr>
-				<td class="altbg1" valign="top"><?php echo $form->labelEx($model, 'dateend'); ?></td>
+				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'dateend'); ?></td>
 				<td><?php $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 					'model'=>$model,
 					'attribute'=>'dateend',
@@ -92,17 +92,17 @@
 			</tr>
 
 			<tr>
-				<td class="altbg1" valign="top"><?php echo $form->labelEx($model, 'uid'); ?></td>
+				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'uid'); ?></td>
 				<td><?php echo $form->textField($model, 'uid'); ?><?php echo $form->error($model, 'uid'); ?></td>
 			</tr>
 
 			<tr>
-				<td class="altbg1" valign="top"><?php echo $form->labelEx($model, 'gid'); ?></td>
+				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'gid'); ?></td>
 				<td><?php echo $form->textField($model, 'gid'); ?><?php echo $form->error($model, 'gid'); ?></td>
 			</tr>
 
 			<tr>
-				<td class="altbg1" valign="top"><?php echo $form->labelEx($model, 'datemoney'); ?></td>
+				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'datemoney'); ?></td>
 				<td><?php $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 					'model'=>$model,
 					'attribute'=>'datemoney',
@@ -124,15 +124,10 @@
 			</tr>
 
 			<tr>
-				<td class="altbg1" valign="top"><?php echo $form->labelEx($model, 'status'); ?></td>
-				<td><?php echo $form->textField($model, 'status'); ?><?php echo $form->error($model, 'status'); ?></td>
-			</tr>
-
-			<tr>
-				<td class="altbg1" valign="top"><?php echo $form->labelEx($model, 'note'); ?></td>
-				<td><?php echo $form->textField($model, 'note'); ?><?php echo $form->error($model, 'note'); ?></td>
+				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'note'); ?></td>
+				<td><?php echo $form->textArea($model, 'note', array('rows' => '5')); ?><?php echo $form->error($model, 'note'); ?></td>
 			</tr>
         </tbody></table>
     </div>
-    <center><?php echo CHtml::submitButton('Submit'); ?></center>
+    <center><?php echo CHtml::submitButton('Submit', array('value' => '提 交', 'class' => 'btn')); ?></center>
 <?php $this->endWidget(); ?>

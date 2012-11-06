@@ -89,5 +89,13 @@ return array(
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
+		'Status' => array(
+			'0' => '无效',
+			'1' => '有效',
+		),
+		'customerType' => array(
+			'1' => '普通客户',
+			'2' => '重点客户',
+		),
 	),
 );

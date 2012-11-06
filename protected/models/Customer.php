@@ -9,6 +9,7 @@
  * @property integer $type
  * @property string $address
  * @property string $note
+ * @property integer $status
  */
 class Customer extends CActiveRecord
 {
@@ -38,14 +39,14 @@ class Customer extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('customer, type', 'required'),
-			array('type', 'numerical', 'integerOnly'=>true),
+			array('customer', 'required'),
+			array('type, status', 'numerical', 'integerOnly'=>true),
 			array('customer', 'length', 'max'=>100),
 			array('address', 'length', 'max'=>200),
 			array('note', 'length', 'max'=>500),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('cuid, customer, type, address, note', 'safe', 'on'=>'search'),
+			array('cuid, customer, type, address, note, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,6 +58,7 @@ class Customer extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'contacts' => array(self::HAS_MANY, 'Contact', 'cuid'),
 		);
 	}
 
@@ -71,6 +73,7 @@ class Customer extends CActiveRecord
 			'type' => '客户类型',
 			'address' => '客户地址',
 			'note' => '备注',
+			'status' => 'Status',
 		);
 	}
 
@@ -90,9 +93,26 @@ class Customer extends CActiveRecord
 		$criteria->compare('type',$this->type);
 		$criteria->compare('address',$this->address,true);
 		$criteria->compare('note',$this->note,true);
+		$criteria->compare('status',$this->status);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	public function beforeSave()
+	{
+		if(parent::beforeSave())
+		{
+			if($this->getIsNewRecord())
+			{
+				$this->status = 1;
+			}
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

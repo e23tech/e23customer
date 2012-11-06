@@ -2,11 +2,14 @@
 
 class ContractController extends Controller
 {
+	private $_model;
+
 	public function init()
 	{
 		parent::init();
 		$this->defaultAction = 'list';
 	}
+
 	public function actionAdd()
 	{
 		$model=new Contract;
@@ -45,7 +48,20 @@ class ContractController extends Controller
 
 	public function actionList()
 	{
-		$this->render('list');
+		$criteria = new CDbCriteria();
+		$criteria->order = "cid DESC";
+		$criteria->condition = "status = 1";
+		$count = Contract::model()->count($criteria);
+
+		$pager = new CPagination($count);
+		$pager->pageSize = 20;
+		$pager->applyLimit($criteria);
+
+		$cList = Contract::model()->findAll($criteria);
+		$this->render('list', array(
+			'pages' => $pager,
+			'cList' => $cList,
+		));
 	}
 
 	public function actionShow()
@@ -93,4 +109,18 @@ class ContractController extends Controller
 		);
 	}
 	*/
+
+	protected function _loadModel()
+	{
+		if($this->_model===null)
+		{
+			if(isset($_GET['cid']))
+			{
+				$this->_model=Contract::model()->findByPk($_GET['cid']);
+			}
+			if($this->_model===null)
+				throw new CHttpException(404,'The requested page does not exist.');
+		}
+		return $this->_model;
+	}
 }

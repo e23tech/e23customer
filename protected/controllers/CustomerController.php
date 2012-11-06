@@ -2,6 +2,8 @@
 
 class CustomerController extends Controller
 {
+	private $_model;
+
 	public function actionAdd()
 	{
 		$model=new Customer;
@@ -17,10 +19,9 @@ class CustomerController extends Controller
 		if(isset($_POST['Customer']))
 		{
 			$model->attributes=$_POST['Customer'];
-			if($model->validate())
+			if($model->validate() && $model->save())
 			{
-				// form inputs are valid, do something here
-				return;
+				$this->redirect(url('customer/view/cuid/' . Yii::app()->db->getLastInsertID()));
 			}
 		}
 		$this->render('add',array('model'=>$model));
@@ -33,22 +34,57 @@ class CustomerController extends Controller
 
 	public function actionEdit()
 	{
-		$this->render('edit');
-	}
+		$model = $this->_loadModel();
 
-	public function actionIndex()
-	{
-		$this->render('index');
+		if(isset($_POST['ajax']) && $_POST['ajax']==='customer-edit-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+
+		if(isset($_POST['Customer']))
+		{
+			$model->attributes=$_POST['Customer'];
+			if($model->validate() && $model->save())
+			{
+				$this->redirect(url('customer/view/cuid/' . $_GET['cuid']));
+			}
+		}
+		$this->render('add',array('model'=>$model));
 	}
 
 	public function actionList()
 	{
-		$this->render('list');
+		$criteria = new CDbCriteria();
+		$criteria->order = "type DESC, cuid DESC";
+		$criteria->condition = "status = 1";
+		$count = Customer::model()->count($criteria);
+
+		$pager = new CPagination($count);
+		$pager->pageSize = 20;
+		$pager->applyLimit($criteria);
+
+		$cuList = Customer::model()->findAll($criteria);
+		$this->render('list', array(
+			'pages' => $pager,
+			'cuList' => $cuList,
+		));
 	}
 
 	public function actionMenu()
 	{
 		$this->render('menu');
+	}
+
+	public function actionView($cuid = 0)
+	{
+		if(!$cuid) Yii::app()->end('缺少参数$cuid');
+
+		$model = Customer::model()->findByPk($cuid);
+
+		$this->render('view', array(
+			'model' => $model,
+		));
 	}
 
 	// Uncomment the following methods and override them if needed
@@ -77,4 +113,18 @@ class CustomerController extends Controller
 		);
 	}
 	*/
+
+	protected function _loadModel()
+	{
+		if($this->_model===null)
+		{
+			if(isset($_GET['cuid']))
+			{
+				$this->_model=Customer::model()->findByPk($_GET['cuid']);
+			}
+			if($this->_model===null)
+				throw new CHttpException(404,'The requested page does not exist.');
+		}
+		return $this->_model;
+	}
 }

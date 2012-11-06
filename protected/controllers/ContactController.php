@@ -2,8 +2,13 @@
 
 class ContactController extends Controller
 {
-	public function actionAdd()
+	private $_model;
+
+	public function actionAdd($cuid = 0)
 	{
+		if(!request()->isPostRequest && !$cuid)
+			Yii::app()->end('缺少$cuid');
+
 		$model=new Contact;
 
 		// uncomment the following code to enable ajax-based validation
@@ -18,33 +23,80 @@ class ContactController extends Controller
 		if(isset($_POST['Contact']))
 		{
 			$model->attributes=$_POST['Contact'];
-			if($model->validate())
+			if($model->validate() && $model->save())
 			{
-				// form inputs are valid, do something here
-				return;
+				$this->redirect(url('contact/list/cuid/' . $cuid));
 			}
 		}
-		$this->render('add',array('model'=>$model));
+
+		$this->render('add',array(
+			'model'=>$model,
+			'cuid' => $cuid,
+		));
 	}
 
 	public function actionDelete()
 	{
-		$this->render('delete');
+		$model = $this->_loadModel();
+		$model->status = 0;
+		if($model->save())
+			$this->redirect(url('contact/list'));
 	}
 
 	public function actionEdit()
 	{
-		$this->render('edit');
+
+		$model = $this->_loadModel();
+		// uncomment the following code to enable ajax-based validation
+
+		if(isset($_POST['ajax']) && $_POST['ajax']==='contact-add-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+
+
+		if(isset($_POST['Contact']))
+		{
+			$model->attributes=$_POST['Contact'];
+			if($model->validate() && $model->save())
+			{
+				$this->redirect(url('contact/view/coid/'.$_GET['coid']));
+			}
+		}
+
+		$this->render('edit',array(
+			'model'=>$model,
+		));
 	}
 
-	public function actionIndex()
+	public function actionList($cuid = 0)
 	{
-		$this->render('index');
+		$criteria = new CDbCriteria();
+		$criteria->order = "coid DESC";
+		$criteria->condition = $cuid > 0 ? "cuid = $cuid AND status = 1" : "status = 1";
+		$count = Contact::model()->count($criteria);
+
+		$pager = new CPagination($count);
+		$pager->pageSize = 20;
+		$pager->applyLimit($criteria);
+
+		$contactList = Contact::model()->findAll($criteria);
+		$this->render('list', array(
+			'pages' => $pager,
+			'coList' => $contactList,
+		));
 	}
 
-	public function actionList()
+	public function actionView($coid = 0)
 	{
-		$this->render('list');
+		if(!$coid) Yii::app()->end('缺少参数$coid');
+
+		$model = Contact::model()->findByPk($coid);
+
+		$this->render('view', array(
+			'model' => $model,
+		));
 	}
 
 	// Uncomment the following methods and override them if needed
@@ -73,4 +125,18 @@ class ContactController extends Controller
 		);
 	}
 	*/
+
+	protected function _loadModel()
+	{
+		if($this->_model===null)
+		{
+			if(isset($_GET['coid']))
+			{
+				$this->_model=Contact::model()->findByPk($_GET['coid']);
+			}
+			if($this->_model===null)
+				throw new CHttpException(404,'The requested page does not exist.');
+		}
+		return $this->_model;
+	}
 }

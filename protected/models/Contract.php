@@ -13,10 +13,10 @@
  * @property integer $coid
  * @property string $datestart
  * @property string $dateend
- * @property string $status
  * @property integer $uid
  * @property integer $gid
  * @property string $note
+ * @property integer $status
  */
 class Contract extends CActiveRecord
 {
@@ -47,13 +47,13 @@ class Contract extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('contractno, cuid, datesign, money, coid, datestart, dateend, uid, gid', 'required'),
-			array('cuid, coid, uid, gid', 'numerical', 'integerOnly'=>true),
-			array('contractno', 'length', 'max'=>10),
-			array('money, status', 'length', 'max'=>20),
+			array('cuid, coid, uid, gid, status', 'numerical', 'integerOnly'=>true),
+			array('contractno, datesign, datemoney, datestart, dateend', 'length', 'max'=>10),
+			array('money', 'length', 'max'=>20),
 			array('note', 'length', 'max'=>500),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('cid, contractno, cuid, datesign, money, datemoney, coid, datestart, dateend, status, uid, gid, note', 'safe', 'on'=>'search'),
+			array('cid, contractno, cuid, datesign, money, datemoney, coid, datestart, dateend, uid, gid, note, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -91,6 +91,7 @@ class Contract extends CActiveRecord
 			'uid' => '业务员ID',
 			'gid' => '合同部门',
 			'note' => '合同备注',
+			'status' => 'Status',
 		);
 	}
 
@@ -108,20 +109,35 @@ class Contract extends CActiveRecord
 		$criteria->compare('cid',$this->cid);
 		$criteria->compare('contractno',$this->contractno,true);
 		$criteria->compare('cuid',$this->cuid);
-		$criteria->compare('customertype',$this->customertype);
-		$criteria->compare('datesign',$this->datesign);
+		$criteria->compare('datesign',$this->datesign,true);
 		$criteria->compare('money',$this->money,true);
-		$criteria->compare('datemoney',$this->datemoney);
+		$criteria->compare('datemoney',$this->datemoney,true);
 		$criteria->compare('coid',$this->coid);
-		$criteria->compare('datestart',$this->datestart);
-		$criteria->compare('dateend',$this->dateend);
-		$criteria->compare('status',$this->status,true);
+		$criteria->compare('datestart',$this->datestart,true);
+		$criteria->compare('dateend',$this->dateend,true);
 		$criteria->compare('uid',$this->uid);
 		$criteria->compare('gid',$this->gid);
 		$criteria->compare('note',$this->note,true);
+		$criteria->compare('status',$this->status);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	public function beforeSave()
+	{
+		if(parent::beforeSave())
+		{
+			if($this->getIsNewRecord())
+			{
+				$this->status = 1;
+			}
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
