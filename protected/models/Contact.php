@@ -5,18 +5,19 @@
  *
  * The followings are the available columns in table '{{contact}}':
  * @property integer $coid
+ * @property integer $cuid
  * @property string $contact
  * @property string $telephone
  * @property string $email
  * @property integer $type
  * @property string $note
  */
-class Contac extends CActiveRecord
+class Contact extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return Contac the static model class
+	 * @return Contact the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -39,14 +40,14 @@ class Contac extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('contact, telephone', 'required'),
-			array('type', 'numerical', 'integerOnly'=>true),
+			array('cuid, contact, telephone', 'required'),
+			array('cuid, type', 'numerical', 'integerOnly'=>true),
 			array('contact', 'length', 'max'=>20),
 			array('telephone, email', 'length', 'max'=>30),
 			array('note', 'length', 'max'=>500),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('coid, contact, telephone, email, type, note', 'safe', 'on'=>'search'),
+			array('coid, cuid, contact, telephone, email, type, note', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,12 +68,13 @@ class Contac extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'coid' => 'Coid',
-			'contact' => 'Contact',
-			'telephone' => 'Telephone',
-			'email' => 'Email',
-			'type' => 'Type',
-			'note' => 'Note',
+			'coid' => '联系人ID',
+			'cuid' => '所属客户',
+			'contact' => '联系人',
+			'telephone' => '联系人电话',
+			'email' => '联系人邮件',
+			'type' => '联系人类型',
+			'note' => '备注',
 		);
 	}
 
@@ -88,6 +90,7 @@ class Contac extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('coid',$this->coid);
+		$criteria->compare('cuid',$this->cuid);
 		$criteria->compare('contact',$this->contact,true);
 		$criteria->compare('telephone',$this->telephone,true);
 		$criteria->compare('email',$this->email,true);

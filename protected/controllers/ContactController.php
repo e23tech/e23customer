@@ -4,7 +4,27 @@ class ContactController extends Controller
 {
 	public function actionAdd()
 	{
-		$this->render('add');
+		$model=new Contact;
+
+		// uncomment the following code to enable ajax-based validation
+
+		if(isset($_POST['ajax']) && $_POST['ajax']==='contact-add-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+
+
+		if(isset($_POST['Contact']))
+		{
+			$model->attributes=$_POST['Contact'];
+			if($model->validate())
+			{
+				// form inputs are valid, do something here
+				return;
+			}
+		}
+		$this->render('add',array('model'=>$model));
 	}
 
 	public function actionDelete()
@@ -25,11 +45,6 @@ class ContactController extends Controller
 	public function actionList()
 	{
 		$this->render('list');
-	}
-
-	public function actionMenu()
-	{
-		$this->render('menu');
 	}
 
 	// Uncomment the following methods and override them if needed

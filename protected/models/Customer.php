@@ -66,11 +66,11 @@ class Customer extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'cuid' => 'Cuid',
-			'customer' => 'Customer',
-			'type' => 'Type',
-			'address' => 'Address',
-			'note' => 'Note',
+			'cuid' => '客户ID',
+			'customer' => '客户名称',
+			'type' => '客户类型',
+			'address' => '客户地址',
+			'note' => '备注',
 		);
 	}
 

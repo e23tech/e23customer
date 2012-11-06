@@ -4,7 +4,26 @@ class CustomerController extends Controller
 {
 	public function actionAdd()
 	{
-		$this->render('add');
+		$model=new Customer;
+
+		// uncomment the following code to enable ajax-based validation
+		if(isset($_POST['ajax']) && $_POST['ajax']==='customer-add-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+
+
+		if(isset($_POST['Customer']))
+		{
+			$model->attributes=$_POST['Customer'];
+			if($model->validate())
+			{
+				// form inputs are valid, do something here
+				return;
+			}
+		}
+		$this->render('add',array('model'=>$model));
 	}
 
 	public function actionDelete()

@@ -1,14 +1,14 @@
 		<li>
-			<span class="folder">快捷操作</span>
+			<span class="folder">普通管理</span>
 			<ul>
-				<li><span class="file"><?php echo CHtml::link('欢迎页', url('site/welcome'), array('target' => 'main')) ?></span></li>
-				<li><span class="file"><?php echo CHtml::link('合同录入', url('site/welcome'), array('target' => 'main')) ?></span></li>
+				<li><span class="file"><?php echo CHtml::link('合同列表', url('contract/list'), array('target' => 'main')) ?></span></li>
+				<li><span class="file"><?php echo CHtml::link('合同录入', url('contract/add'), array('target' => 'main')) ?></span></li>
 			</ul>
 		</li>
 		<li>
-			<span class="folder">个人信息</span>
+			<span class="folder">高级管理</span>
 			<ul>
-				<li><span class="file"><?php echo CHtml::link('个人信息', url('site/welcome'), array('target' => 'main')) ?></span></li>
-				<li><span class="file"><?php echo CHtml::link('密码管理', url('site/welcome'), array('target' => 'main')) ?></span></li>
+				<li><span class="file"><?php echo CHtml::link('合同分类', url('contract/sort'), array('target' => 'main')) ?></span></li>
+				<li><span class="file"><?php echo CHtml::link('合同显示', url('contract/show'), array('target' => 'main')) ?></span></li>
 			</ul>
 		</li>

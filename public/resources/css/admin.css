@@ -58,7 +58,7 @@ textarea { border-width: 1px;border-style: solid;border-color: #808080 #CCC #EEE
 .subtable td { margin:0;padding:5px;border:0;line-height: 18px; }
 
 .thbg1 { background: #F0F0F0; }
-.altbg1 { background: #F0F8FF; }
+.altbg1 { background: #F0F8FF; text-align: right;}
 .altbg1 strong { display: block; }
 .altbg2 { background: #FFFFE8; }
 .altbg3 { background: #EDCCFF; }

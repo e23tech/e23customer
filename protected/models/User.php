@@ -4,7 +4,7 @@
  * This is the model class for table "{{user}}".
  *
  * The followings are the available columns in table '{{user}}':
- * @property integer $id
+ * @property integer $uid
  * @property string $username
  * @property string $password
  * @property string $salt
@@ -50,7 +50,7 @@ class User extends CActiveRecord
 			array('note', 'length', 'max'=>500),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, username, password, salt, realname, gid, status, role, note', 'safe', 'on'=>'search'),
+			array('uid, username, password, salt, realname, gid, status, role, note', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -71,7 +71,7 @@ class User extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'ID',
+			'uid' => 'ID',
 			'username' => 'Username',
 			'password' => 'Password',
 			'salt' => 'Salt',
@@ -94,7 +94,7 @@ class User extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id);
+		$criteria->compare('uid',$this->uid);
 		$criteria->compare('username',$this->username,true);
 		$criteria->compare('password',$this->password,true);
 		$criteria->compare('salt',$this->salt,true);

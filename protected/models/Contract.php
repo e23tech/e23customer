@@ -6,19 +6,15 @@
  * The followings are the available columns in table '{{contract}}':
  * @property integer $cid
  * @property string $contractno
- * @property string $customer
  * @property integer $cuid
- * @property integer $customertype
- * @property integer $datesign
+ * @property string $datesign
  * @property string $money
- * @property integer $datemoney
- * @property string $contact
+ * @property string $datemoney
  * @property integer $coid
- * @property integer $datestart
- * @property integer $dateend
+ * @property string $datestart
+ * @property string $dateend
  * @property string $status
- * @property string $salesman
- * @property integer $sid
+ * @property integer $uid
  * @property integer $gid
  * @property string $note
  */
@@ -50,15 +46,14 @@ class Contract extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('contractno, customer, cuid, customertype, datesign, money, coid, datestart, dateend, sid, gid', 'required'),
-			array('cuid, customertype, datesign, datemoney, coid, datestart, dateend, sid, gid', 'numerical', 'integerOnly'=>true),
+			array('contractno, cuid, datesign, money, coid, datestart, dateend, uid, gid', 'required'),
+			array('cuid, coid, uid, gid', 'numerical', 'integerOnly'=>true),
 			array('contractno', 'length', 'max'=>10),
-			array('customer', 'length', 'max'=>100),
-			array('money, contact, status, salesman', 'length', 'max'=>20),
+			array('money, status', 'length', 'max'=>20),
 			array('note', 'length', 'max'=>500),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('cid, contractno, customer, cuid, customertype, datesign, money, datemoney, contact, coid, datestart, dateend, status, salesman, sid, gid, note', 'safe', 'on'=>'search'),
+			array('cid, contractno, cuid, datesign, money, datemoney, coid, datestart, dateend, status, uid, gid, note', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -70,6 +65,10 @@ class Contract extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'customer' => array(self::BELONGS_TO, 'Customer', 'cuid'),
+			'contact' => array(self::BELONGS_TO, 'Contact', 'coid'),
+			'salesman' => array(self::BELONGS_TO, 'User', 'uid'),
+			'contractgroup' => array(self::BELONGS_TO, 'Group', 'gid'),
 		);
 	}
 
@@ -79,23 +78,19 @@ class Contract extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'cid' => 'Cid',
-			'contractno' => 'Contractno',
-			'customer' => 'Customer',
-			'cuid' => 'Cuid',
-			'customertype' => 'Customertype',
-			'datesign' => 'Datesign',
-			'money' => 'Money',
-			'datemoney' => 'Datemoney',
-			'contact' => 'Contact',
-			'coid' => 'Coid',
-			'datestart' => 'Datestart',
-			'dateend' => 'Dateend',
-			'status' => 'Status',
-			'salesman' => 'Salesman',
-			'sid' => 'Sid',
-			'gid' => 'Gid',
-			'note' => 'Note',
+			'cid' => 'ID',
+			'contractno' => '合同编号',
+			'cuid' => '客户ID',
+			'datesign' => '合同签署日期',
+			'money' => '合同金额',
+			'datemoney' => '合同回款日期',
+			'coid' => '联系人ID',
+			'datestart' => '合同开始日期',
+			'dateend' => '合同结束日期',
+			'status' => '合同状态',
+			'uid' => '业务员ID',
+			'gid' => '合同部门',
+			'note' => '合同备注',
 		);
 	}
 
@@ -112,19 +107,16 @@ class Contract extends CActiveRecord
 
 		$criteria->compare('cid',$this->cid);
 		$criteria->compare('contractno',$this->contractno,true);
-		$criteria->compare('customer',$this->customer,true);
 		$criteria->compare('cuid',$this->cuid);
 		$criteria->compare('customertype',$this->customertype);
 		$criteria->compare('datesign',$this->datesign);
 		$criteria->compare('money',$this->money,true);
 		$criteria->compare('datemoney',$this->datemoney);
-		$criteria->compare('contact',$this->contact,true);
 		$criteria->compare('coid',$this->coid);
 		$criteria->compare('datestart',$this->datestart);
 		$criteria->compare('dateend',$this->dateend);
 		$criteria->compare('status',$this->status,true);
-		$criteria->compare('salesman',$this->salesman,true);
-		$criteria->compare('sid',$this->sid);
+		$criteria->compare('uid',$this->uid);
 		$criteria->compare('gid',$this->gid);
 		$criteria->compare('note',$this->note,true);
 
