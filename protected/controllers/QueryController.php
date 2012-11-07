@@ -2,6 +2,12 @@
 
 class QueryController extends Controller
 {
+	public function init()
+	{
+		parent::init();
+		$this->defaultAction = 'main';
+	}
+
 	public function actionIndex()
 	{
 		$this->render('index');

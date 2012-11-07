@@ -16,7 +16,7 @@ class ContractController extends Controller
 
 		// uncomment the following code to enable ajax-based validation
 
-		if(isset($_POST['ajax']) && $_POST['ajax']==='contract-contractform-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='contract-add-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
@@ -33,17 +33,71 @@ class ContractController extends Controller
 				return;
 			}
 		}
-		$this->render('add',array('model'=>$model));
+		$customer = Customer::model()->findAll("status = 1");
+		$cuidList = CMap::mergeArray(array('' => ''), CHtml::listData($customer, 'cuid', 'customer'));
+		$contact = Contact::model()->findAll("status = 1");
+		$coidList = CMap::mergeArray(array('' => ''), CHtml::listData($contact, 'coid', 'contact'));
+		$group = Group::model()->findAll();
+		$gidList = CMap::mergeArray(array('' => ''), CHtml::listData($group, 'gid', 'group'));
+		$user = User::model()->findAll("status = 1");
+		$uidList = CMap::mergeArray(array('' => ''), CHtml::listData($user, 'uid', 'realname'));
+		$nowUserRole = $this->getUserRole(Yii::app()->user->id);
+		$this->render('add',array(
+			'model'=>$model,
+			'cuidList' => $cuidList,
+			'coidList' => $coidList,
+			'gidList' => $gidList,
+			'uidList' => $uidList,
+			'nowUserRole' => $nowUserRole,
+		));
 	}
 
 	public function actionDelete()
 	{
-		$this->render('delete');
+		$model = $this->_loadModel();
+		$model->status = 0;
+		if($model->save())
+			$this->redirect(url('contract/list'));
 	}
 
 	public function actionEdit()
 	{
-		$this->render('edit');
+		$model = $this->_loadModel();
+
+		// uncomment the following code to enable ajax-based validation
+
+		if(isset($_POST['ajax']) && $_POST['ajax']==='contract-edit-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+
+		if(isset($_POST['Contract']))
+		{
+			$model->attributes=$_POST['Contract'];
+			if($model->validate() && $model->save())
+			{
+				$this->redirect(url('contract/list'));
+			}
+		}
+
+		$customer = Customer::model()->findAll("status = 1");
+		$cuidList = CMap::mergeArray(array('' => ''), CHtml::listData($customer, 'cuid', 'customer'));
+		$contact = Contact::model()->findAll("status = 1");
+		$coidList = CMap::mergeArray(array('' => ''), CHtml::listData($contact, 'coid', 'contact'));
+		$group = Group::model()->findAll();
+		$gidList = CMap::mergeArray(array('' => ''), CHtml::listData($group, 'gid', 'group'));
+		$user = User::model()->findAll("status = 1");
+		$uidList = CMap::mergeArray(array('' => ''), CHtml::listData($user, 'uid', 'realname'));
+		$nowUserRole = $this->getUserRole(Yii::app()->user->id);
+		$this->render('edit',array(
+			'model'=>$model,
+			'cuidList' => $cuidList,
+			'coidList' => $coidList,
+			'gidList' => $gidList,
+			'uidList' => $uidList,
+			'nowUserRole' => $nowUserRole,
+		));
 	}
 
 	public function actionList()
@@ -64,11 +118,12 @@ class ContractController extends Controller
 		));
 	}
 
-	public function actionShow()
+	public function actionView()
 	{
-		$cid = 1;
-		$model = Contract::model()->findByPk($cid);
-		echo $model->salesman->realname;
+		$model = $this->_loadModel();
+		$this->render('view', array(
+			'model' => $model,
+		));
 	}
 
 	public function actionSort()
@@ -123,4 +178,11 @@ class ContractController extends Controller
 		}
 		return $this->_model;
 	}
+
+	protected function getUserRole($uid)
+	{
+		$user = User::model()->find("uid = $uid");
+		return $user['role'];
+	}
+
 }

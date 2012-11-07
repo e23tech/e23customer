@@ -5,7 +5,7 @@
 ?>
 
 <?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'contact-add-form',
+	'id'=>'contact-edit-form',
 	'enableAjaxValidation'=>false,
 )); ?>
 <div class="space">

@@ -46,7 +46,6 @@ class User extends CActiveRecord
 			array('gid, status, role', 'numerical', 'integerOnly'=>true),
 			array('username, realname', 'length', 'max'=>20),
 			array('password', 'length', 'max'=>32),
-			array('salt', 'length', 'max'=>6),
 			array('note', 'length', 'max'=>500),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -62,6 +61,7 @@ class User extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'group' => array(self::BELONGS_TO, 'Group', 'gid'),
 		);
 	}
 
@@ -72,14 +72,14 @@ class User extends CActiveRecord
 	{
 		return array(
 			'uid' => 'ID',
-			'username' => 'Username',
-			'password' => 'Password',
+			'username' => '用户名',
+			'password' => '密码',
 			'salt' => 'Salt',
-			'realname' => 'Realname',
-			'gid' => 'Gid',
-			'status' => 'Status',
-			'role' => 'Role',
-			'note' => 'Note',
+			'realname' => '真是姓名',
+			'gid' => '部门',
+			'status' => '状态',
+			'role' => '角色',
+			'note' => '备注',
 		);
 	}
 

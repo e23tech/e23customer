@@ -68,7 +68,7 @@ class Contract extends CActiveRecord
 			'customer' => array(self::BELONGS_TO, 'Customer', 'cuid'),
 			'contact' => array(self::BELONGS_TO, 'Contact', 'coid'),
 			'salesman' => array(self::BELONGS_TO, 'User', 'uid'),
-			'contractgroup' => array(self::BELONGS_TO, 'Group', 'gid'),
+			'group' => array(self::BELONGS_TO, 'Group', 'gid'),
 		);
 	}
 
@@ -80,15 +80,15 @@ class Contract extends CActiveRecord
 		return array(
 			'cid' => 'ID',
 			'contractno' => '合同编号',
-			'cuid' => '客户ID',
+			'cuid' => '客户',
 			'datesign' => '合同签署日期',
 			'money' => '合同金额',
 			'datemoney' => '合同回款日期',
-			'coid' => '联系人ID',
+			'coid' => '联系人',
 			'datestart' => '合同开始日期',
 			'dateend' => '合同结束日期',
 			'status' => '合同状态',
-			'uid' => '业务员ID',
+			'uid' => '业务员',
 			'gid' => '合同部门',
 			'note' => '合同备注',
 			'status' => 'Status',

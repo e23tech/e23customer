@@ -17,7 +17,14 @@ function gotoMenu(obj, tab) {
 		//showSubmenu(action);
 //		parent.menu.location = '/modoer/admin.php?module=modoer&act=cpmenu&tab=' + tab;
 		parent.menu.location = '/index.php?r=' + tab + '/menu';
-		//parent.main.location = '/modoer/admin.php?' + param;
+		if(tab == 'site')
+		{
+			parent.main.location = '/index.php?r=site/welcome';
+		}
+		else
+		{
+			parent.main.location = '/index.php?r=' + tab;
+		}
 	}
 	return false;
 }
@@ -51,7 +58,6 @@ function admin_refresh() {
 	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'contract');" onfocus="this.blur()">合同管理</a></li>
 	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'customer');" onfocus="this.blur()">客户管理</a></li>
 	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'query');" onfocus="this.blur()">查询分析</a></li>
-	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'system');" onfocus="this.blur()">系统设置</a></li>
 	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'user');" onfocus="this.blur()">用户管理</a></li>
     </ul>
   </div>

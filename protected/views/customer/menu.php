@@ -9,5 +9,6 @@
 			<span class="folder">联系人管理</span>
 			<ul>
 				<li><span class="file"><?php echo CHtml::link('联系人列表', url('contact/list'), array('target' => 'main')) ?></span></li>
+				<li><span class="file"><?php echo CHtml::link('添加联系人', url('contact/add'), array('target' => 'main')) ?></span></li>
 			</ul>
 		</li>

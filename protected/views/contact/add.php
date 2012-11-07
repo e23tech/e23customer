@@ -11,7 +11,7 @@
 	<div class="space">
 		<div class="subtitle">联系人录入</div>
 		<div><?php echo $form->errorSummary($model); ?></div>
-		<?php echo $form->hiddenField($model, 'cuid', array('value' => $cuid)); ?>
+
 		<table class="maintable" border="0" cellspacing="0" cellpadding="0" id="config1">
 			<tr>
 				<td width="20%" class="altbg1 right"><?php echo $form->labelEx($model,'contact'); ?></td>
@@ -22,6 +22,25 @@
 				<td width="20%" class="altbg1 right"><?php echo $form->labelEx($model,'rank'); ?></td>
 				<td width="*"><?php echo $form->textField($model,'rank'); ?><?php echo $form->error($model,'rank'); ?></td>
 			</tr>
+
+			<?php
+			if($cuid)
+			{
+				echo $form->hiddenField($model, 'cuid', array('value' => $cuid));
+			}
+			else
+			{
+			?>
+				<tr>
+				<td width="20%" class="altbg1 right"><?php echo $form->labelEx($model,'cuid'); ?></td>
+				<td width="*">
+					<?php echo $form->dropDownList($model, 'cuid' , $cuidList, array('data-placeholder'=>'请选择一个客户', 'style'=>'width:140px;')); ?>
+					<a href="<?php echo url('customer/add');?>">添加新客户</a>
+				</td>
+			</tr>
+			<?php
+			}
+			?>
 
 			<tr>
 				<td width="20%" class="altbg1 right"><?php echo $form->labelEx($model,'telephone'); ?></td>
@@ -41,3 +60,12 @@
 	</div>
 	<center><?php echo CHtml::submitButton('Submit', array('value' => '提 交', 'class' => 'btn')); ?></center>
 <?php $this->endWidget(); ?>
+<?php if(!$cuid):?>
+<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/resources/js/chosen.jquery.min.js',CClientScript::POS_END); ?>
+<?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/resources/css/chosen.css'); ?>
+<script type="text/javascript">
+$(function(){
+	$('#Contact_cuid').chosen({no_results_text: "没有该客户"});
+});
+</script>
+<?php endif;?>

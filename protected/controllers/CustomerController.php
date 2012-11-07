@@ -4,6 +4,12 @@ class CustomerController extends Controller
 {
 	private $_model;
 
+	public function init()
+	{
+		parent::init();
+		$this->defaultAction = 'list';
+	}
+
 	public function actionAdd()
 	{
 		$model=new Customer;
@@ -29,7 +35,10 @@ class CustomerController extends Controller
 
 	public function actionDelete()
 	{
-		$this->render('delete');
+		$model = $this->_loadModel();
+		$model->status = 0;
+		if($model->save())
+			$this->redirect(url('customer/list'));
 	}
 
 	public function actionEdit()
@@ -76,12 +85,9 @@ class CustomerController extends Controller
 		$this->render('menu');
 	}
 
-	public function actionView($cuid = 0)
+	public function actionView()
 	{
-		if(!$cuid) Yii::app()->end('缺少参数$cuid');
-
-		$model = Customer::model()->findByPk($cuid);
-
+		$model = $this->_loadModel();
 		$this->render('view', array(
 			'model' => $model,
 		));

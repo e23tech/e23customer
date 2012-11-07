@@ -221,3 +221,5 @@ textarea { border-width: 1px;border-style: solid;border-color: #808080 #CCC #EEE
 .subject_search_multi .subjectlist { list-style:none; max-height:100px; _height:100px; overflow:auto; overflow-x:hidden; margin:0; padding:0; }
 .subject_search_multi .subjectlist li { margin:0; table-layout:fixed; word-break: break-all; overflow:hidden; padding:2px 0; }
 .subject_search_multi .subjectlist a:hover  { text-decoration: none; }
+
+.errorMessage {display: inline; color: #FF0000; text-indent: 1em;}

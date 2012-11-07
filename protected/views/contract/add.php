@@ -1,5 +1,5 @@
 <?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'contract-contractform-form',
+	'id'=>'contract-add-form',
 	'enableAjaxValidation'=>true,
 )); ?>
 	<div class="space">
@@ -14,7 +14,10 @@
 
 			<tr>
 				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'cuid'); ?></td>
-				<td><?php echo $form->textField($model, 'cuid'); ?><?php echo $form->error($model, 'cuid'); ?></td>
+				<td>
+					<?php echo $form->dropDownList($model, 'cuid' , $cuidList, array('data-placeholder'=>'请选择合同客户', 'style'=>'width:140px;')); ?>
+					<a href="<?php echo url('customer/add');?>">添加新客户</a>
+				</td>
 			</tr>
 
 			<tr>
@@ -44,7 +47,10 @@
 
 			<tr>
 				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'coid'); ?></td>
-				<td><?php echo $form->textField($model, 'coid'); ?><?php echo $form->error($model, 'coid'); ?></td>
+				<td>
+					<?php echo $form->dropDownList($model, 'coid' , $coidList, array('data-placeholder'=>'请选择合同联系人', 'style'=>'width:140px;')); ?>
+					<a href="<?php echo url('contact/add');?>">添加新联系人</a>
+				</td>
 			</tr>
 
 			<tr>
@@ -91,14 +97,20 @@
 					)));?></td>
 			</tr>
 
+			<?php
+			if($nowUserRole == EC_USER):
+				echo $form->hiddenField($model, 'uid', array('value' => Yii::app()->user->id));
+			else:
+			?>
 			<tr>
 				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'uid'); ?></td>
-				<td><?php echo $form->textField($model, 'uid'); ?><?php echo $form->error($model, 'uid'); ?></td>
+				<td><?php echo $form->dropDownList($model, 'uid' , $uidList, array('data-placeholder'=>'请选择业务员', 'style'=>'width:140px;')); ?></td>
 			</tr>
+			<?php endif;?>
 
 			<tr>
 				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'gid'); ?></td>
-				<td><?php echo $form->textField($model, 'gid'); ?><?php echo $form->error($model, 'gid'); ?></td>
+				<td><?php echo $form->dropDownList($model, 'gid' , $gidList, array('data-placeholder'=>'请选择业务部门', 'style'=>'width:140px;')); ?></td>
 			</tr>
 
 			<tr>
@@ -131,3 +143,13 @@
     </div>
     <center><?php echo CHtml::submitButton('Submit', array('value' => '提 交', 'class' => 'btn')); ?></center>
 <?php $this->endWidget(); ?>
+<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/resources/js/chosen.jquery.min.js',CClientScript::POS_END); ?>
+<?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/resources/css/chosen.css'); ?>
+<script type="text/javascript">
+$(function(){
+	$('#Contract_cuid').chosen({no_results_text: "没有该客户"});
+	$('#Contract_coid').chosen({no_results_text: "没有该联系人"});
+	$('#Contract_gid').chosen({no_results_text: "没有该部门"});
+	$('#Contract_uid').chosen({no_results_text: "没有该业务员"});
+});
+</script>

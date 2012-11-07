@@ -1,8 +1,8 @@
 <?php
-/* @var $this ContactController */
+/* @var $this GroupController */
 
 $this->breadcrumbs=array(
-	'Contact'=>array('/contact'),
+	'Group'=>array('/group'),
 	'Delete',
 );
 ?>

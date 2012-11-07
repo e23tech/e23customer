@@ -1,9 +1,9 @@
 <?php
-/* @var $this ContractController */
+/* @var $this GroupController */
 
 $this->breadcrumbs=array(
-	'Contract'=>array('/contract'),
-	'Delete',
+	'Group'=>array('/group'),
+	'List',
 );
 ?>
 <h1><?php echo $this->id . '/' . $this->action->id; ?></h1>

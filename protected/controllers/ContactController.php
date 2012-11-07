@@ -4,10 +4,21 @@ class ContactController extends Controller
 {
 	private $_model;
 
+	public function init()
+	{
+		parent::init();
+		$this->defaultAction = 'list';
+	}
+
 	public function actionAdd($cuid = 0)
 	{
+		$cuidList = array();
 		if(!request()->isPostRequest && !$cuid)
-			Yii::app()->end('缺少$cuid');
+		{
+			$cuid = 0;
+			$customer = Customer::model()->findAll("status = 1");
+			$cuidList = CMap::mergeArray(array('' => ''), CHtml::listData($customer, 'cuid', 'customer'));
+		}
 
 		$model=new Contact;
 
@@ -32,6 +43,7 @@ class ContactController extends Controller
 		$this->render('add',array(
 			'model'=>$model,
 			'cuid' => $cuid,
+			'cuidList' => $cuidList,
 		));
 	}
 
@@ -49,7 +61,7 @@ class ContactController extends Controller
 		$model = $this->_loadModel();
 		// uncomment the following code to enable ajax-based validation
 
-		if(isset($_POST['ajax']) && $_POST['ajax']==='contact-add-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='contact-edit-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
@@ -88,12 +100,9 @@ class ContactController extends Controller
 		));
 	}
 
-	public function actionView($coid = 0)
+	public function actionView()
 	{
-		if(!$coid) Yii::app()->end('缺少参数$coid');
-
-		$model = Contact::model()->findByPk($coid);
-
+		$model = $this->_loadModel();
 		$this->render('view', array(
 			'model' => $model,
 		));

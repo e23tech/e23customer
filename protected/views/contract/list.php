@@ -39,5 +39,4 @@
 		'maxButtonCount'=>13
 	));?>
 	</table>
-
 </div>
