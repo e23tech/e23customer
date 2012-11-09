@@ -8,9 +8,31 @@ class QueryController extends Controller
 		$this->defaultAction = 'main';
 	}
 
-	public function actionIndex()
+	public function actionMain()
 	{
-		$this->render('index');
+		if(isset($_POST['query']))
+		{
+			print_r($_POST['query']);
+		}
+		$this->render('main', array(
+			'year' => $this->yearList(),
+			'morq' => $this->morqList(),
+		));
+	}
+
+	public function actionGroup()
+	{
+		//todo
+	}
+
+	public function actionSalesman()
+	{
+		//todo
+	}
+
+	public function actionCustomer()
+	{
+		//todo
 	}
 
 	public function actionMenu()
@@ -44,4 +66,53 @@ class QueryController extends Controller
 		);
 	}
 	*/
+
+	public function actionSelectdate()
+	{
+		if($_POST['country'])
+		{
+			$data=array(
+				'1' => 'shandong',
+				'2' => 'shanxi',
+			);
+			foreach($data as $value=>$name)
+			{
+				echo CHtml::tag('option',
+					array('value'=>$value),CHtml::encode($name),true);
+			}
+		}
+		else
+			echo 'false';
+	}
+
+	protected function yearList($select = 2012, $start = 2007, $end = 2012)
+	{
+		$res = array();
+		$thisyear = date('Y', time());
+		$end = isset($end) ? $end : $thisyear;
+		$select = isset($select) ? $select : $thisyear;
+		$res['select'] = $select;
+		$start = isset($start) ? $start : ($end - 5);
+		for($i = $start; $i <= $end; $i++ )
+		{
+			$res['list'][$i] = $i;
+		}
+		return $res;
+	}
+
+	protected function morqList()
+	{
+		$res = array();
+		$res['select'] = date('m', time());
+		for($i = 1; $i <= 12; $i++)
+		{
+			$res['list'][$i] = $i . '月份';
+		}
+		for($i = 1; $i <= 4; $i++)
+		{
+			$res['list']['q'.$i] = $i . '季度';
+		}
+		$res['list']['y'] = '全年';
+		return $res;
+	}
 }
