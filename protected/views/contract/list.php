@@ -37,6 +37,6 @@
 		'nextPageLabel' => '下一页',
 		'pages' => $pages,
 		'maxButtonCount'=>13
-	));?>
+		));?>
 	</table>
 </div>

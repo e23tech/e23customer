@@ -10,29 +10,108 @@ class QueryController extends Controller
 
 	public function actionMain()
 	{
+		$moneyAll = 0;
+		$list = array();
 		if(isset($_POST['query']))
 		{
-			print_r($_POST['query']);
+			$criteria = new CDbCriteria();
+			$criteria->condition = $this->getCondition($_POST['query']);
+			$criteria->order = "cid DESC";
+			$list = Contract::model()->findAll($criteria);
+			$moneyAll = 0;
+			foreach($list as $val)
+			{
+				$moneyAll += $val['money'];
+			}
 		}
 		$this->render('main', array(
 			'year' => $this->yearList(),
 			'morq' => $this->morqList(),
+			'cList' => $list,
+			'moneyall' => $moneyAll,
 		));
 	}
 
 	public function actionGroup()
 	{
-		//todo
+		$moneyAll = 0;
+		$list = array();
+		$groupList = Group::model()->findAll();
+		$groupOption = CHtml::listData($groupList, 'gid', 'group');
+		if(isset($_POST['query']))
+		{
+			$criteria = new CDbCriteria();
+			$criteria->condition = $this->getCondition($_POST['query']);
+			$criteria->order = "cid DESC";
+			$list = Contract::model()->findAll($criteria);
+			$moneyAll = 0;
+			foreach($list as $val)
+			{
+				$moneyAll += $val['money'];
+			}
+		}
+		$this->render('group', array(
+			'year' => $this->yearList(),
+			'morq' => $this->morqList(),
+			'cList' => $list,
+			'moneyall' => $moneyAll,
+			'groupoption' => $groupOption,
+		));
 	}
 
 	public function actionSalesman()
 	{
-		//todo
+		$moneyAll = 0;
+		$list = array();
+		//$salesmanlist = User::model()->findAll("status=1 AND role = " . EC_USER);
+		$salesmanlist = User::model()->findAll("status=1");
+		$salesmanOptions = CHtml::listData($salesmanlist, 'uid', 'realname');
+		if(isset($_POST['query']))
+		{
+			$criteria = new CDbCriteria();
+			$criteria->condition = $this->getCondition($_POST['query']);
+			$criteria->order = "cid DESC";
+			$list = Contract::model()->findAll($criteria);
+			$moneyAll = 0;
+			foreach($list as $val)
+			{
+				$moneyAll += $val['money'];
+			}
+		}
+		$this->render('salesman', array(
+			'year' => $this->yearList(),
+			'morq' => $this->morqList(),
+			'cList' => $list,
+			'moneyall' => $moneyAll,
+			'salesmanoptions' => $salesmanOptions,
+		));
 	}
 
 	public function actionCustomer()
 	{
-		//todo
+		$moneyAll = 0;
+		$list = array();
+		$customerList = Customer::model()->findAll("status=1");
+		$customerOption = CHtml::listData($customerList, 'cuid', 'customer');
+		if(isset($_POST['query']))
+		{
+			$criteria = new CDbCriteria();
+			$criteria->condition = $this->getCondition($_POST['query']);
+			$criteria->order = "cid DESC";
+			$list = Contract::model()->findAll($criteria);
+			$moneyAll = 0;
+			foreach($list as $val)
+			{
+				$moneyAll += $val['money'];
+			}
+		}
+		$this->render('customer', array(
+			'year' => $this->yearList(),
+			'morq' => $this->morqList(),
+			'cList' => $list,
+			'moneyall' => $moneyAll,
+			'customerOption' => $customerOption,
+		));
 	}
 
 	public function actionMenu()
@@ -113,6 +192,48 @@ class QueryController extends Controller
 			$res['list']['q'.$i] = $i . '季度';
 		}
 		$res['list']['y'] = '全年';
+		return $res;
+	}
+
+	protected function getCondition($arr)
+	{
+		$res = '';
+		$salesmanstr = '';
+
+		$type = $arr['type'];
+		if(is_numeric($arr['morq']))
+		{
+			$res = "$type LIKE '" . $arr['year'] . '-' . str_pad($arr['morq'], 2, 0, STR_PAD_LEFT) . "-%'";
+		}
+		elseif(!is_numeric($arr['morq']) && substr($arr['morq'], 0, 1) == 'q')
+		{
+			$qstart = (substr($arr['morq'], 1, 1) - 1) * 3 + 1;
+			$qend = (substr($arr['morq'], 1, 1) - 1) * 3 + 4;
+			$res = "$type > '" . $arr['year'] . '-' . str_pad($qstart, 2, 0, STR_PAD_LEFT) . "-00' AND $type < '" . $arr['year'] . '-' . str_pad($qend, 2, 0, STR_PAD_LEFT) . "-00'";
+		}
+		else
+		{
+			$res = "$type LIKE '" . $arr['year'] . "-%'";
+		}
+
+		if($arr['salesman'])
+		{
+			$salesmanstr = "'" . $arr['salesman'] . "'";
+		}
+		elseif($arr['group'])
+		{
+			$salesmanlist = User::model()->findAll("status = 1 AND gid = '" . $arr['group'] . "'");
+			foreach($salesmanlist as $val)
+			{
+				$salesmanstr .= empty($salesmanstr) ? "'" . $val['uid'] . "'" : ", '" . $val['uid'] . "'";
+			}
+		}
+		if(!empty($salesmanlist)) $res .= " AND uid IN (" . $salesmanstr . ")";
+
+		if($arr['customer'])
+		{
+			$res .= " AND cuid = '" . $arr['customer'] . "'";
+		}
 		return $res;
 	}
 }

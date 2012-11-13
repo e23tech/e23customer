@@ -1,8 +1,7 @@
 <div class="space">
 	<h1>欢迎使用<?php echo Yii::app()->name;?></h1>
-	<p>这是一个管理XXXX的系统，使用之前请仔细查看！</p>
 </div>
-<div class="space">
+<!--<div class="space">
 	<div class="subtitle">后台在线用户</div>
 	<table class="maintable" border="0" cellspacing="0" cellpadding="0">
 		<tr class="altbg1">
@@ -16,4 +15,4 @@
 			<td>2012-10-18 11:11:24</td>
 		</tr>
 	</table>
-</div>
+</div>-->
