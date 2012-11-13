@@ -52,8 +52,7 @@ class Group extends CActiveRecord
 	{
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
-		return array(
-		);
+		return array();
 	}
 
 	/**
@@ -62,9 +61,9 @@ class Group extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'gid' => 'Gid',
-			'group' => 'Group',
-			'note' => 'Note',
+			'gid' => '部门ID',
+			'group' => '部门',
+			'note' => '备注',
 		);
 	}
 

@@ -15,24 +15,21 @@ class ContractController extends Controller
 		$model=new Contract;
 
 		// uncomment the following code to enable ajax-based validation
-
 		if(isset($_POST['ajax']) && $_POST['ajax']==='contract-add-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
 
-
 		if(isset($_POST['Contract']))
 		{
 			$model->attributes=$_POST['Contract'];
-			if($model->validate())
+			if($model->validate() && $model->save())
 			{
-				// form inputs are valid, do something here
-				$model->save();
-				return;
+				$this->redirect(url('contract/list'));
 			}
 		}
+
 		$customer = Customer::model()->findAll("status = 1");
 		$cuidList = CMap::mergeArray(array('' => ''), CHtml::listData($customer, 'cuid', 'customer'));
 		$contact = Contact::model()->findAll("status = 1");
@@ -42,6 +39,7 @@ class ContractController extends Controller
 		$user = User::model()->findAll("status = 1");
 		$uidList = CMap::mergeArray(array('' => ''), CHtml::listData($user, 'uid', 'realname'));
 		$nowUserRole = $this->getUserRole(Yii::app()->user->id);
+
 		$this->render('add',array(
 			'model'=>$model,
 			'cuidList' => $cuidList,

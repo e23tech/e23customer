@@ -13,6 +13,9 @@ class UserController extends Controller
 	public function actionAdd()
 	{
 		$model = new User();
+		$groupList = Group::model()->findAll();
+		$groupOption = CHtml::listData($groupList, 'gid', 'group');
+		$roleOption = array(EC_USER => '业务员', EC_OPERATOR => '部门主任');
 
 		// uncomment the following code to enable ajax-based validation
 		if(isset($_POST['ajax']) && $_POST['ajax']==='user-add-form')
@@ -30,7 +33,9 @@ class UserController extends Controller
 			}
 		}
 		$this->render('add',array(
-			'model'=>$model
+			'model'=>$model,
+			'groupOption' => $groupOption,
+			'roleOption' => $roleOption,
 		));
 	}
 
@@ -45,7 +50,8 @@ class UserController extends Controller
 	public function actionEdit()
 	{
 		$model = $this->_loadModel();
-
+		$groupList = Group::model()->findAll();
+		$groupOption = CHtml::listData($groupList, 'gid', 'group');
 		// uncomment the following code to enable ajax-based validation
 		if(isset($_POST['ajax']) && $_POST['ajax']==='user-eidt-form')
 		{
@@ -55,6 +61,7 @@ class UserController extends Controller
 
 		if(isset($_POST['User']))
 		{
+			if(empty($_POST['User']['password'])) unset($_POST['User']['password']);
 			$model->attributes=$_POST['User'];
 			if($model->validate() && $model->save())
 			{
@@ -62,7 +69,8 @@ class UserController extends Controller
 			}
 		}
 		$this->render('edit',array(
-			'model'=>$model
+			'model'=>$model,
+			'groupOption' => $groupOption,
 		));
 	}
 
@@ -130,6 +138,10 @@ class UserController extends Controller
 			if(isset($_GET['uid']))
 			{
 				$this->_model=User::model()->findByPk($_GET['uid']);
+			}
+			else
+			{
+				$this->_model=User::model()->findByPk(Yii::app()->user->id);
 			}
 			if($this->_model===null)
 				throw new CHttpException(404,'The requested page does not exist.');

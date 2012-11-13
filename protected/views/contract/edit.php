@@ -12,7 +12,7 @@
                 <td width="*"><?php echo $form->textField($model,'contractno'); ?><?php echo $form->error($model,'contractno'); ?></td>
             </tr>
 
-			<tr>
+<tr>
 				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'cuid'); ?></td>
 				<td>
 					<?php echo $form->dropDownList($model, 'cuid' , $cuidList, array('data-placeholder'=>'请选择合同客户', 'style'=>'width:140px;')); ?>

@@ -63,8 +63,8 @@ class QueryController extends Controller
 	{
 		$moneyAll = 0;
 		$list = array();
-		//$salesmanlist = User::model()->findAll("status=1 AND role = " . EC_USER);
-		$salesmanlist = User::model()->findAll("status=1");
+		$salesmanlist = User::model()->findAll("status=1 AND role = " . EC_USER);
+		//$salesmanlist = User::model()->findAll("status=1");
 		$salesmanOptions = CHtml::listData($salesmanlist, 'uid', 'realname');
 		if(isset($_POST['query']))
 		{

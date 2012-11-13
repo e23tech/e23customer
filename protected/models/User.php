@@ -42,7 +42,7 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, password, salt, realname, role', 'required'),
+			array('username, password, realname, role', 'required'),
 			array('gid, status, role', 'numerical', 'integerOnly'=>true),
 			array('username, realname', 'length', 'max'=>20),
 			array('password', 'length', 'max'=>32),
@@ -128,6 +128,8 @@ class User extends CActiveRecord
 				$this->salt = substr(md5(time()), 5, 6);
 				$this->password = $this->hashpassword($this->password, $this->salt);
 			}
+			else
+				$this->password = $this->hashpassword($this->password, $this->salt);
 			return true;
 		}
 		else

@@ -12,7 +12,26 @@ class GroupController extends Controller
 
 	public function actionAdd()
 	{
-		$this->render('add');
+		$model = new Group();
+
+		// uncomment the following code to enable ajax-based validation
+		if(isset($_POST['ajax']) && $_POST['ajax']==='group-add-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+
+		if(isset($_POST['Group']))
+		{
+			$model->attributes=$_POST['Group'];
+			if($model->validate() && $model->save())
+			{
+				$this->redirect(url('group/list'));
+			}
+		}
+		$this->render('add',array(
+			'model'=>$model,
+		));
 	}
 
 	public function actionDelete()
@@ -20,17 +39,45 @@ class GroupController extends Controller
 		$model = $this->_loadModel();
 		$model->status = 0;
 		if($model->save())
-			$this->redirect(url('user/list'));
+			$this->redirect(url('group/list'));
 	}
 
 	public function actionEdit()
 	{
-		$this->render('edit');
+		$model = $this->_loadModel();
+		if(isset($_POST['ajax']) && $_POST['ajax']==='group-edit-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+
+		if(isset($_POST['Group']))
+		{
+			$model->attributes=$_POST['Group'];
+			if($model->validate() && $model->save())
+			{
+				$this->redirect(url('group/list'));
+			}
+		}
+		$this->render('edit',array(
+			'model' => $model,
+		));
+
 	}
 
 	public function actionList()
 	{
-		$this->render('list');
+		$criteria = new CDbCriteria();
+		$count = Group::model()->count($criteria);
+
+		$pager = new CPagination($count);
+		$pager->pageSize = 20;
+		$pager->applyLimit($criteria);
+		$group = Group::model()->findAll();
+		$this->render('list', array(
+			'group' => $group,
+			'pages' => $pager,
+		));
 	}
 
 	public function actionView()
@@ -67,4 +114,18 @@ class GroupController extends Controller
 		);
 	}
 	*/
+
+	protected function _loadModel()
+	{
+		if($this->_model===null)
+		{
+			if(isset($_GET['gid']))
+			{
+				$this->_model=Group::model()->findByPk($_GET['gid']);
+			}
+			if($this->_model===null)
+				throw new CHttpException(404,'The requested page does not exist.');
+		}
+		return $this->_model;
+	}
 }
