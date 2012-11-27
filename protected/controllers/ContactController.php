@@ -10,6 +10,28 @@ class ContactController extends Controller
 		$this->defaultAction = 'list';
 	}
 
+	public function accessRules()
+	{
+		return CMap::mergeArray(parent::accessRules(),
+			array(
+				array('deny',
+					'actions' => array('list', 'delete', 'edit', 'view'),
+					'users' => $this->getUsers(EC_USER),
+				),
+				array('deny',
+					'actions' => array('edit', 'delete'),
+					'users' => $this->getUsers(EC_OPERATOR),
+				),
+				array('allow',
+					'users' => $this->getUsers(EC_FOUNDER),
+				),
+				array('deny',
+					'users' => array('?'),
+				),
+			)
+		);
+	}
+
 	public function actionAdd($cuid = 0)
 	{
 		$cuidList = array();

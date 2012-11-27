@@ -10,6 +10,28 @@ class ContractController extends Controller
 		$this->defaultAction = 'list';
 	}
 
+	public function accessRules()
+	{
+		return CMap::mergeArray(parent::accessRules(),
+			array(
+				array('deny',
+					'actions' => array('sort', 'list', 'delete', 'edit', 'view'),
+					'users' => $this->getUsers(EC_USER),
+				),
+				array('deny',
+					'actions' => array('edit', 'delete'),
+					'users' => $this->getUsers(EC_OPERATOR),
+				),
+				array('allow',
+					'users' => $this->getUsers(EC_FOUNDER),
+				),
+				array('deny',
+					'users' => array('?'),
+				),
+			)
+		);
+	}
+
 	public function actionAdd()
 	{
 		$model=new Contract;
@@ -38,15 +60,13 @@ class ContractController extends Controller
 		$gidList = CMap::mergeArray(array('' => ''), CHtml::listData($group, 'gid', 'group'));
 		$user = User::model()->findAll("status = 1");
 		$uidList = CMap::mergeArray(array('' => ''), CHtml::listData($user, 'uid', 'realname'));
-		$nowUserRole = $this->getUserRole(Yii::app()->user->id);
-
 		$this->render('add',array(
 			'model'=>$model,
 			'cuidList' => $cuidList,
 			'coidList' => $coidList,
 			'gidList' => $gidList,
 			'uidList' => $uidList,
-			'nowUserRole' => $nowUserRole,
+			'nowUserRole' => $this->getUserRole(),
 		));
 	}
 
@@ -175,12 +195,6 @@ class ContractController extends Controller
 				throw new CHttpException(404,'The requested page does not exist.');
 		}
 		return $this->_model;
-	}
-
-	protected function getUserRole($uid)
-	{
-		$user = User::model()->find("uid = $uid");
-		return $user['role'];
 	}
 
 }

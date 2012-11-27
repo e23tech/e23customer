@@ -8,6 +8,24 @@ class QueryController extends Controller
 		$this->defaultAction = 'main';
 	}
 
+	public function accessRules()
+	{
+		return CMap::mergeArray(parent::accessRules(),
+			array(
+				array('deny',
+					'actions' => array('main', 'group', 'customer'),
+					'users' => $this->getUsers(EC_USER),
+				),
+				array('allow',
+					'users' => $this->getUsers(EC_OPERATOR),
+				),
+				array('allow',
+					'users' => $this->getUsers(EC_FOUNDER),
+				),
+			)
+		);
+	}
+
 	public function actionMain()
 	{
 		$moneyAll = 0;
@@ -63,7 +81,10 @@ class QueryController extends Controller
 	{
 		$moneyAll = 0;
 		$list = array();
-		$salesmanlist = User::model()->findAll("status=1 AND role = " . EC_USER);
+		if($this->getUserRole(Yii::app()->user->id) == EC_USER)
+			$salesmanlist = User::model()->findAllByPk(Yii::app()->user->id);
+		else
+			$salesmanlist = User::model()->findAll("status=1 AND role = " . EC_USER);
 		//$salesmanlist = User::model()->findAll("status=1");
 		$salesmanOptions = CHtml::listData($salesmanlist, 'uid', 'realname');
 		if(isset($_POST['query']))
@@ -216,11 +237,11 @@ class QueryController extends Controller
 			$res = "$type LIKE '" . $arr['year'] . "-%'";
 		}
 
-		if($arr['salesman'])
+		if(!empty($arr['salesman']))
 		{
 			$salesmanstr = "'" . $arr['salesman'] . "'";
 		}
-		elseif($arr['group'])
+		elseif(!empty($arr['group']))
 		{
 			$salesmanlist = User::model()->findAll("status = 1 AND gid = '" . $arr['group'] . "'");
 			foreach($salesmanlist as $val)
@@ -228,7 +249,7 @@ class QueryController extends Controller
 				$salesmanstr .= empty($salesmanstr) ? "'" . $val['uid'] . "'" : ", '" . $val['uid'] . "'";
 			}
 		}
-		if(!empty($salesmanlist)) $res .= " AND uid IN (" . $salesmanstr . ")";
+		if(!empty($salesmanstr)) $res .= " AND uid IN (" . $salesmanstr . ")";
 
 		if($arr['customer'])
 		{

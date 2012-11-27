@@ -10,12 +10,34 @@ class UserController extends Controller
 		$this->defaultAction = 'list';
 	}
 
+	public function accessRules()
+	{
+		return CMap::mergeArray(parent::accessRules(),
+			array(
+				array('deny',
+					'actions' => array('list', 'delete', 'add'),
+					'users' => $this->getUsers(EC_USER),
+				),
+				array('deny',
+					'actions' => array('delete', 'add'),
+					'users' => $this->getUsers(EC_OPERATOR),
+				),
+				array('allow',
+					'users' => $this->getUsers(EC_FOUNDER),
+				),
+				array('deny',
+					'users' => array('?'),
+				),
+			)
+		);
+	}
+
 	public function actionAdd()
 	{
 		$model = new User();
 		$groupList = Group::model()->findAll();
 		$groupOption = CHtml::listData($groupList, 'gid', 'group');
-		$roleOption = array(EC_USER => '业务员', EC_OPERATOR => '部门主任');
+		$roleOption = array(EC_USER => '业务员', EC_OPERATOR => '领导');
 
 		// uncomment the following code to enable ajax-based validation
 		if(isset($_POST['ajax']) && $_POST['ajax']==='user-add-form')
@@ -137,7 +159,12 @@ class UserController extends Controller
 		{
 			if(isset($_GET['uid']))
 			{
-				$this->_model=User::model()->findByPk($_GET['uid']);
+				if($this->getUserRole(Yii::app()->user->id) == EC_FOUNDER)
+					$this->_model=User::model()->findByPk($_GET['uid']);
+				elseif($_GET['uid'] == Yii::app()->user->id)
+					$this->_model=User::model()->findByPk(Yii::app()->user->id);
+				else
+					throw new CHttpException(404,'权限不足.');
 			}
 			else
 			{

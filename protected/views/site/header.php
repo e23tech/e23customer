@@ -47,7 +47,7 @@ function admin_refresh() {
 <body style="margin:0px;">
 <div id="header">
     <div class="op">
-        你好：<b>admin</b>，欢迎使用<?php echo Yii::app()->name; ?>。
+        你好：<b><?php echo Yii::app()->user->name;?></b>，欢迎使用<?php echo Yii::app()->name; ?>。
         <a href="#" onclick="admin_refresh();">刷新</a>&nbsp;
         <a href="<?php echo Yii::app()->createUrl('site/logout'); ?>" target="_top">退出</a>
     </div>

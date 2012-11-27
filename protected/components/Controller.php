@@ -42,26 +42,78 @@ class Controller extends CController
 			return false;
 		}
 	}
+	public function filters()
+	{
+		return CMap::mergeArray(parent::filters(),array(
+			'accessControl',
+		));
+	}
+
+	public function accessRules()
+	{
+		return array(
+			array('allow',
+				'actions' => array('login'),
+				'users' => array('?'),
+			),
+			array('deny',
+				'actions' => array('login'),
+				'users' => array('@'),
+			),
+			array('deny',
+				'users' => array('?'),
+			),
+		);
+	}
 
 	/**
 	 * 强制进行登录验证（以下三个方法）
 	 */
-	public function filters()
+//	public function filters()
+//	{
+//		return CMap::mergeArray(parent::filters(), array('LoginRequired'));
+//	}
+//
+//	public function filterLoginRequired($filterChain)
+//	{
+//		$actions = $this->noLoginRequiredActions();
+//		if (!in_array($filterChain->action->id, $actions))
+//			if (Yii::app()->user->isGuest)
+//				Yii::app()->user->loginRequired();
+//		$filterChain->run();
+//	}
+//
+//	public function noLoginRequiredActions()
+//	{
+//		return array('login');
+//	}
+
+	public function getUsers($role = '')
 	{
-		return CMap::mergeArray(parent::filters(), array('LoginRequired'));
+		$res = array();
+		if(empty($role)) $role = EC_USER;
+		$users = User::model()->findAll("status = 1 AND role = '" . $role . "'");
+		foreach($users as $user)
+		{
+			$res[] = $user['username'];
+		}
+		return $res;
 	}
 
-	public function filterLoginRequired($filterChain)
+	public function checkUserAccess($role)
 	{
-		$actions = $this->noLoginRequiredActions();
-		if (!in_array($filterChain->action->id, $actions))
-			if (Yii::app()->user->isGuest)
-				Yii::app()->user->loginRequired();
-		$filterChain->run();
+		if(empty($role)) return false;
+		$model = User::model()->findByPk(Yii::app()->user->id);
+		if($role == $model->role)
+			return true;
+		else
+			return false;
 	}
 
-	public function noLoginRequiredActions()
+	public function getUserRole($uid = '')
 	{
-		return array('login');
+		$pk = !empty($uid) ? $uid : Yii::app()->user->id;
+		$model = User::model()->findByPk($pk);
+		return $model->role;
 	}
 }

@@ -50,6 +50,7 @@ class User extends CActiveRecord
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('uid, username, password, salt, realname, gid, status, role, note', 'safe', 'on'=>'search'),
+			array('username', 'unique'),
 		);
 	}
 
@@ -128,11 +129,22 @@ class User extends CActiveRecord
 				$this->salt = substr(md5(time()), 5, 6);
 				$this->password = $this->hashpassword($this->password, $this->salt);
 			}
-			else
+			elseif($this->passwordChanged($this->uid))
+			{
 				$this->password = $this->hashpassword($this->password, $this->salt);
+			}
+
 			return true;
 		}
 		else
 			return false;
+	}
+
+	public function passwordChanged($uid)
+	{
+		$model = User::model()->findByPk($uid);
+		$oldpwd = $model->password;
+		$newpwd = $this->hashpassword($this->password, $this->salt);
+		return $oldpwd == $newpwd ? false : true;
 	}
 }

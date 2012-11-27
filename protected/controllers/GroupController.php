@@ -10,6 +10,28 @@ class GroupController extends Controller
 		$this->defaultAction = 'list';
 	}
 
+	public function accessRules()
+	{
+		return CMap::mergeArray(parent::accessRules(),
+			array(
+				array('deny',
+					'actions' => array('list', 'delete', 'add', 'edit', 'view'),
+					'users' => $this->getUsers(EC_USER),
+				),
+				array('deny',
+					'actions' => array('delete', 'add', 'edit'),
+					'users' => $this->getUsers(EC_OPERATOR),
+				),
+				array('allow',
+					'users' => $this->getUsers(EC_FOUNDER),
+				),
+				array('deny',
+					'users' => array('?'),
+				),
+			)
+		);
+	}
+
 	public function actionAdd()
 	{
 		$model = new Group();

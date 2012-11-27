@@ -5,9 +5,9 @@
 				<li><span class="file"><?php echo CHtml::link('合同录入', url('contract/add'), array('target' => 'main')) ?></span></li>
 			</ul>
 		</li>
-		<li>
-			<span class="folder">高级管理</span>
-			<ul>
-				<li><span class="file"><?php echo CHtml::link('合同查询', url('contract/sort'), array('target' => 'main')) ?></span></li>
-			</ul>
-		</li>
+<!--		<li>-->
+<!--			<span class="folder">高级管理</span>-->
+<!--			<ul>-->
+<!--				<li><span class="file">--><?php //echo CHtml::link('合同查询', url('contract/sort'), array('target' => 'main')) ?><!--</span></li>-->
+<!--			</ul>-->
+<!--		</li>-->
