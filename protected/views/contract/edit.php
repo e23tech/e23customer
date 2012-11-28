@@ -98,8 +98,8 @@
 			</tr>
 
 			<?php
-if($nowUserRole == EC_USER):
-echo $form->hiddenField($model, 'uid', array('value' => Yii::app()->user->id));
+if($nowUserRole == EC_USER || $nowUserRole == EC_DIRECTOR):
+echo $form->hiddenField($model, 'uid', array('value' => user()->id));
 else:
 ?>
 			<tr>
@@ -121,7 +121,7 @@ else:
 	'options'=>array(
 	'showAnim'=>'slideDown', // 'show' (the default), 'slideDown', 'fadeIn', 'fold'
 	'showOn'=>'focus', // 'focus', 'button', 'both'
-	'buttonImage'=>Yii::app()->request->baseUrl.'/images/calendar.png',
+	'buttonImage'=>request()->baseUrl.'/images/calendar.png',
 	'buttonImageOnly'=>true,
 	'htmlOptions'=>array('readonly'=>"readonly"),
 	'changeMonth'=>true,
@@ -143,8 +143,8 @@ else:
     </div>
     <center><?php echo CHtml::submitButton('Submit', array('value' => '提 交', 'class' => 'btn')); ?></center>
 <?php $this->endWidget(); ?>
-<?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/resources/js/chosen.jquery.min.js',CClientScript::POS_END); ?>
-<?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/resources/css/chosen.css'); ?>
+<?php cs()->registerScriptFile(request()->baseUrl.'/resources/js/chosen.jquery.min.js',CClientScript::POS_END); ?>
+<?php cs()->registerCssFile(request()->baseUrl.'/resources/css/chosen.css'); ?>
 <script type="text/javascript">
 $(function(){
 	$('#Contract_cuid').chosen({no_results_text: "没有该客户"});

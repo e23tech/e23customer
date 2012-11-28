@@ -14,19 +14,27 @@ class UserController extends Controller
 	{
 		return CMap::mergeArray(parent::accessRules(),
 			array(
-				array('deny',
-					'actions' => array('list', 'delete', 'add'),
-					'users' => $this->getUsers(EC_USER),
-				),
-				array('deny',
-					'actions' => array('delete', 'add'),
-					'users' => $this->getUsers(EC_OPERATOR),
+				array('allow',
+					'actions' => array('login', 'error'),
+					'users' => array('*'),
 				),
 				array('allow',
-					'users' => $this->getUsers(EC_FOUNDER),
+					'expression' => array($this, 'isFounder'),
+				),
+				array('allow',
+					'actions' => array('list', 'view', 'edit'),
+					'expression' => array($this, 'isOperator'),
+				),
+				array('allow',
+					'actions' => array('view', 'edit'),
+					'expression' => array($this, 'isDirector'),
+				),
+				array('allow',
+					'actions' => array('view', 'edit'),
+					'expression' => array($this, 'isSalesman'),
 				),
 				array('deny',
-					'users' => array('?'),
+					'users' => array('*'),
 				),
 			)
 		);
@@ -37,7 +45,7 @@ class UserController extends Controller
 		$model = new User();
 		$groupList = Group::model()->findAll();
 		$groupOption = CHtml::listData($groupList, 'gid', 'group');
-		$roleOption = array(EC_USER => '业务员', EC_OPERATOR => '领导');
+		$roleOption = array('' => '', EC_USER => '业务员', EC_DIRECTOR => '部门主任', EC_OPERATOR => '公司领导');
 
 		// uncomment the following code to enable ajax-based validation
 		if(isset($_POST['ajax']) && $_POST['ajax']==='user-add-form')
@@ -126,49 +134,22 @@ class UserController extends Controller
 		));
 	}
 
-	// Uncomment the following methods and override them if needed
-	/*
-	public function filters()
-	{
-		// return the filter configuration for this controller, e.g.:
-		return array(
-			'inlineFilterName',
-			array(
-				'class'=>'path.to.FilterClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-
-	public function actions()
-	{
-		// return external action classes, e.g.:
-		return array(
-			'action1'=>'path.to.ActionClass',
-			'action2'=>array(
-				'class'=>'path.to.AnotherActionClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-	*/
-
 	protected function _loadModel()
 	{
 		if($this->_model===null)
 		{
 			if(isset($_GET['uid']))
 			{
-				if($this->getUserRole(Yii::app()->user->id) == EC_FOUNDER)
+				if($this->isFounder(user()))
 					$this->_model=User::model()->findByPk($_GET['uid']);
-				elseif($_GET['uid'] == Yii::app()->user->id)
-					$this->_model=User::model()->findByPk(Yii::app()->user->id);
+				elseif($_GET['uid'] == user()->id)
+					$this->_model=User::model()->findByPk(user()->id);
 				else
 					throw new CHttpException(404,'权限不足.');
 			}
 			else
 			{
-				$this->_model=User::model()->findByPk(Yii::app()->user->id);
+				$this->_model=User::model()->findByPk(user()->id);
 			}
 			if($this->_model===null)
 				throw new CHttpException(404,'The requested page does not exist.');

@@ -12,15 +12,26 @@ class QueryController extends Controller
 	{
 		return CMap::mergeArray(parent::accessRules(),
 			array(
+				array('allow',
+					'actions' => array('login', 'error'),
+					'users' => array('*'),
+				),
+				array('allow',
+					'expression' => array($this, 'isFounder'),
+				),
+				array('allow',
+					'expression' => array($this, 'isOperator'),
+				),
+				array('allow',
+					'actions' => array('salesman', 'group'),
+					'expression' => array($this, 'isDirector'),
+				),
+				array('allow',
+					'actions' => array('salesman'),
+					'expression' => array($this, 'isSalesman'),
+				),
 				array('deny',
-					'actions' => array('main', 'group', 'customer'),
-					'users' => $this->getUsers(EC_USER),
-				),
-				array('allow',
-					'users' => $this->getUsers(EC_OPERATOR),
-				),
-				array('allow',
-					'users' => $this->getUsers(EC_FOUNDER),
+					'users' => array('*'),
 				),
 			)
 		);
@@ -54,7 +65,15 @@ class QueryController extends Controller
 	{
 		$moneyAll = 0;
 		$list = array();
-		$groupList = Group::model()->findAll();
+		if($this->isDirector(user()))
+		{
+			$gid = User::model()->findByPk(user()->id)->gid;
+			$groupList = Group::model()->findAll("gid = $gid");
+		}
+		else
+		{
+			$groupList = Group::model()->findAll();
+		}
 		$groupOption = CHtml::listData($groupList, 'gid', 'group');
 		if(isset($_POST['query']))
 		{
@@ -81,10 +100,19 @@ class QueryController extends Controller
 	{
 		$moneyAll = 0;
 		$list = array();
-		if($this->getUserRole(Yii::app()->user->id) == EC_USER)
+		if($this->isSalesman(user()))
+		{
 			$salesmanlist = User::model()->findAllByPk(Yii::app()->user->id);
+		}
+		elseif($this->isDirector(user()))
+		{
+			$gid = User::model()->findByPk(user()->id)->gid;
+			$salesmanlist = User::model()->findAll("gid = $gid");
+		}
 		else
-			$salesmanlist = User::model()->findAll("status=1 AND role = " . EC_USER);
+		{
+			$salesmanlist = User::model()->findAll("status=1 AND (role = '" . EC_USER . "' or role = '" . EC_DIRECTOR . "')");
+		}
 		//$salesmanlist = User::model()->findAll("status=1");
 		$salesmanOptions = CHtml::listData($salesmanlist, 'uid', 'realname');
 		if(isset($_POST['query']))
@@ -139,33 +167,6 @@ class QueryController extends Controller
 	{
 		$this->render('menu');
 	}
-
-	// Uncomment the following methods and override them if needed
-	/*
-	public function filters()
-	{
-		// return the filter configuration for this controller, e.g.:
-		return array(
-			'inlineFilterName',
-			array(
-				'class'=>'path.to.FilterClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-
-	public function actions()
-	{
-		// return external action classes, e.g.:
-		return array(
-			'action1'=>'path.to.ActionClass',
-			'action2'=>array(
-				'class'=>'path.to.AnotherActionClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-	*/
 
 	public function actionSelectdate()
 	{

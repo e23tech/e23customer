@@ -2,6 +2,23 @@
 
 class SiteController extends Controller
 {
+	public function accessRules()
+	{
+		return CMap::mergeArray(parent::accessRules(),
+			array(
+				array('allow',
+					'actions' => array('login', 'error'),
+					'users' => array('*'),
+				),
+				array('allow',
+					'users' => array('@'),
+				),
+				array('deny',
+					'users' => array('?'),
+				),
+			)
+		);
+	}
 	/**
 	 * This is the default 'index' action that is invoked
 	 * when an action is not explicitly requested by users.

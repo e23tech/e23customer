@@ -14,19 +14,25 @@ class GroupController extends Controller
 	{
 		return CMap::mergeArray(parent::accessRules(),
 			array(
-				array('deny',
-					'actions' => array('list', 'delete', 'add', 'edit', 'view'),
-					'users' => $this->getUsers(EC_USER),
-				),
-				array('deny',
-					'actions' => array('delete', 'add', 'edit'),
-					'users' => $this->getUsers(EC_OPERATOR),
+				array('allow',
+					'actions' => array('login', 'error'),
+					'users' => array('*'),
 				),
 				array('allow',
-					'users' => $this->getUsers(EC_FOUNDER),
+					'expression' => array($this, 'isFounder'),
+				),
+				array('allow',
+					'actions' => array('list', 'view'),
+					'expression' => array($this, 'isOperator'),
 				),
 				array('deny',
-					'users' => array('?'),
+					'expression' => array($this, 'isDirector'),
+				),
+				array('deny',
+					'expression' => array($this, 'isSalesman'),
+				),
+				array('deny',
+					'users' => array('*'),
 				),
 			)
 		);
@@ -109,33 +115,6 @@ class GroupController extends Controller
 			'model' => $model,
 		));
 	}
-
-	// Uncomment the following methods and override them if needed
-	/*
-	public function filters()
-	{
-		// return the filter configuration for this controller, e.g.:
-		return array(
-			'inlineFilterName',
-			array(
-				'class'=>'path.to.FilterClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-
-	public function actions()
-	{
-		// return external action classes, e.g.:
-		return array(
-			'action1'=>'path.to.ActionClass',
-			'action2'=>array(
-				'class'=>'path.to.AnotherActionClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-	*/
 
 	protected function _loadModel()
 	{

@@ -98,8 +98,8 @@
 			</tr>
 
 			<?php
-			if($nowUserRole == EC_USER):
-				echo $form->hiddenField($model, 'uid', array('value' => Yii::app()->user->id));
+			if($nowUserRole == EC_USER || $nowUserRole == EC_DIRECTOR):
+				echo $form->hiddenField($model, 'uid', array('value' => user()->id));
 			else:
 			?>
 			<tr>

@@ -27,7 +27,7 @@ class Controller extends CController
 	{
 		parent::init();
 		if(!Yii::app()->user->isGuest)
-			$this->ecUser = User::model()->findByPk(Yii::app()->user->id);
+			$this->ecUser = User::model()->findByPk(user()->id);
 	}
 
 	public function beforeAction($action)
@@ -42,78 +42,66 @@ class Controller extends CController
 			return false;
 		}
 	}
-	public function filters()
-	{
-		return CMap::mergeArray(parent::filters(),array(
-			'accessControl',
-		));
-	}
-
-	public function accessRules()
-	{
-		return array(
-			array('allow',
-				'actions' => array('login'),
-				'users' => array('?'),
-			),
-			array('deny',
-				'actions' => array('login'),
-				'users' => array('@'),
-			),
-			array('deny',
-				'users' => array('?'),
-			),
-		);
-	}
 
 	/**
 	 * 强制进行登录验证（以下三个方法）
 	 */
-//	public function filters()
-//	{
-//		return CMap::mergeArray(parent::filters(), array('LoginRequired'));
-//	}
-//
-//	public function filterLoginRequired($filterChain)
-//	{
-//		$actions = $this->noLoginRequiredActions();
-//		if (!in_array($filterChain->action->id, $actions))
-//			if (Yii::app()->user->isGuest)
-//				Yii::app()->user->loginRequired();
-//		$filterChain->run();
-//	}
-//
-//	public function noLoginRequiredActions()
-//	{
-//		return array('login');
-//	}
-
-	public function getUsers($role = '')
+	public function filters()
 	{
-		$res = array();
-		if(empty($role)) $role = EC_USER;
-		$users = User::model()->findAll("status = 1 AND role = '" . $role . "'");
-		foreach($users as $user)
+		return CMap::mergeArray(parent::filters(), array(
+			'LoginRequired',
+			'accessControl',
+		));
+	}
+
+	public function filterLoginRequired($filterChain)
+	{
+		$actions = $this->noLoginRequiredActions();
+		if (!in_array($filterChain->action->id, $actions))
+			if (Yii::app()->user->isGuest)
+				Yii::app()->user->loginRequired();
+		$filterChain->run();
+	}
+
+	public function noLoginRequiredActions()
+	{
+		return array('login');
+	}
+
+	protected function getGroupUids($user)
+	{
+		$gid = User::model()->findByPk($user->id)->gid;
+		$groupUsers = User::model()->findAll("gid = '$gid' AND status = '1'");
+		foreach($groupUsers as $val)
 		{
-			$res[] = $user['username'];
+			$res[] = $val['uid'];
 		}
 		return $res;
 	}
 
-	public function checkUserAccess($role)
+	protected function loadModel($uid)
 	{
-		if(empty($role)) return false;
-		$model = User::model()->findByPk(Yii::app()->user->id);
-		if($role == $model->role)
-			return true;
-		else
-			return false;
+		return User::model()->findByPk(intval($uid));
 	}
 
-	public function getUserRole($uid = '')
+	protected function isFounder($user)
 	{
-		$pk = !empty($uid) ? $uid : Yii::app()->user->id;
-		$model = User::model()->findByPk($pk);
-		return $model->role;
+		return ($this->loadModel($user->id)->role == EC_FOUNDER);
 	}
+
+	protected function isOperator($user)
+	{
+		return ($this->loadModel($user->id)->role == EC_OPERATOR);
+	}
+
+	protected function isDirector($user)
+	{
+		return ($this->loadModel($user->id)->role == EC_DIRECTOR);
+	}
+
+	protected function isSalesman($user)
+	{
+		return ($this->loadModel($user->id)->role == EC_USER);
+	}
+
 }

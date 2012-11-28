@@ -12,7 +12,8 @@ defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
 // system define
 defined('EC_FOUNDER') or define('EC_FOUNDER', 1); //管理员
 defined('EC_OPERATOR') or define('EC_OPERATOR', 2); //领导
-defined('EC_USER') or define('EC_USER', 3); //业务员
+defined('EC_DIRECTOR') or define('EC_DIRECTOR', 3); //部门主任
+defined('EC_USER') or define('EC_USER', 4); //业务员
 
 require($yii);
 require($shortcut);

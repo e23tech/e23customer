@@ -14,19 +14,27 @@ class ContractController extends Controller
 	{
 		return CMap::mergeArray(parent::accessRules(),
 			array(
-				array('deny',
-					'actions' => array('sort', 'list', 'delete', 'edit', 'view'),
-					'users' => $this->getUsers(EC_USER),
-				),
-				array('deny',
-					'actions' => array('edit', 'delete'),
-					'users' => $this->getUsers(EC_OPERATOR),
+				array('allow',
+					'actions' => array('login', 'error'),
+					'users' => array('*'),
 				),
 				array('allow',
-					'users' => $this->getUsers(EC_FOUNDER),
+					'expression' => array($this, 'isFounder'),
+				),
+				array('allow',
+					'actions' => array('list', 'view'),
+					'expression' => array($this, 'isOperator'),
+				),
+				array('allow',
+					'actions' => array('list', 'view', 'add'),
+					'expression' => array($this, 'isDirector'),
+				),
+				array('allow',
+					'actions' => array('add'),
+					'expression' => array($this, 'isSalesman'),
 				),
 				array('deny',
-					'users' => array('?'),
+					'users' => array('*'),
 				),
 			)
 		);
@@ -122,7 +130,14 @@ class ContractController extends Controller
 	{
 		$criteria = new CDbCriteria();
 		$criteria->order = "cid DESC";
-		$criteria->condition = "status = 1";
+		if($this->isDirector(user()))
+		{
+			$criteria->condition = "status = 1 AND uid IN(" . implode(',', $this->getGroupUids(user())) . ")";
+		}
+		else
+		{
+			$criteria->condition = "status = 1";
+		}
 		$count = Contract::model()->count($criteria);
 
 		$pager = new CPagination($count);
@@ -153,35 +168,6 @@ class ContractController extends Controller
 	{
 		$this->render('menu');
 	}
-
-
-
-	// Uncomment the following methods and override them if needed
-	/*
-	public function filters()
-	{
-		// return the filter configuration for this controller, e.g.:
-		return array(
-			'inlineFilterName',
-			array(
-				'class'=>'path.to.FilterClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-
-	public function actions()
-	{
-		// return external action classes, e.g.:
-		return array(
-			'action1'=>'path.to.ActionClass',
-			'action2'=>array(
-				'class'=>'path.to.AnotherActionClass',
-				'propertyName'=>'propertyValue',
-			),
-		);
-	}
-	*/
 
 	protected function _loadModel()
 	{
