@@ -23,6 +23,11 @@
 			</tr>
 
 			<tr>
+				<td width="20%" class="altbg1 right"><?php echo $form->labelEx($model,'telephone'); ?></td>
+				<td width="*"><?php echo $form->textField($model,'telephone'); ?><?php echo $form->error($model,'telephone'); ?></td>
+			</tr>
+
+			<tr>
 				<td width="20%" class="altbg1 right"><?php echo $form->labelEx($model,'address'); ?></td>
 				<td width="*"><?php echo $form->textField($model,'address'); ?><?php echo $form->error($model,'address'); ?></td>
 			</tr>

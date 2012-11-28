@@ -12,6 +12,11 @@
 			</tr>
 
 			<tr>
+				<td class="altbg1 right"><?php echo CHtml::activeLabelEx($model,'telephone'); ?></td>
+				<td><?php echo CHtml::encode($model['telephone']); ?></td>
+			</tr>
+
+			<tr>
 				<td class="altbg1 right"><?php echo CHtml::activeLabelEx($model,'address'); ?></td>
 				<td><?php echo CHtml::encode($model['address']); ?></td>
 			</tr>

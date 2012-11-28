@@ -23,10 +23,8 @@ class CustomerController extends Controller
 					'users' => $this->getUsers(EC_OPERATOR),
 				),
 				array('allow',
+//					'actions' => array('list', 'delete', 'edit', 'view'),
 					'users' => $this->getUsers(EC_FOUNDER),
-				),
-				array('deny',
-					'users' => array('?'),
 				),
 			)
 		);

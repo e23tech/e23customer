@@ -4,7 +4,8 @@
 		<tr class="altbg1">
 			<td width="45" align="center">ID</td>
 			<td width="250">公司名称</td>
-			<td width="200">客户类型</td>
+			<td width="100">客户类型</td>
+			<td width="150">电话</td>
 			<td width="*">客户地址</td>
 			<td width="150">联系人</td>
 			<td width="150">操作</td>
@@ -14,6 +15,7 @@
 			<td align="center"><?php echo $customer['cuid']; ?></td>
 			<td><?php echo $customer['customer']; ?></td>
 			<td><?php echo Yii::app()->params['customerType'][$customer['type']]; ?></td>
+			<td><?php echo $customer['telephone']; ?></td>
 			<td><?php echo $customer['address']; ?></td>
 			<td>
 				[<a href="<?php echo url('contact/list/cuid/' . $customer['cuid']); ?>">查看</a>]

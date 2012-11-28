@@ -7,6 +7,7 @@
  * @property integer $cuid
  * @property string $customer
  * @property integer $type
+ * @property string $telephone
  * @property string $address
  * @property string $note
  * @property integer $status
@@ -42,11 +43,12 @@ class Customer extends CActiveRecord
 			array('customer', 'required'),
 			array('type, status', 'numerical', 'integerOnly'=>true),
 			array('customer', 'length', 'max'=>100),
+			array('telephone', 'length', 'max'=>20),
 			array('address', 'length', 'max'=>200),
 			array('note', 'length', 'max'=>500),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('cuid, customer, type, address, note, status', 'safe', 'on'=>'search'),
+			array('cuid, customer, type, telephone, address, note, status', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -71,6 +73,7 @@ class Customer extends CActiveRecord
 			'cuid' => '客户ID',
 			'customer' => '客户名称',
 			'type' => '客户类型',
+			'telephone' => '联系电话',
 			'address' => '客户地址',
 			'note' => '备注',
 			'status' => 'Status',
@@ -91,6 +94,7 @@ class Customer extends CActiveRecord
 		$criteria->compare('cuid',$this->cuid);
 		$criteria->compare('customer',$this->customer,true);
 		$criteria->compare('type',$this->type);
+		$criteria->compare('telephone',$this->telephone,true);
 		$criteria->compare('address',$this->address,true);
 		$criteria->compare('note',$this->note,true);
 		$criteria->compare('status',$this->status);
