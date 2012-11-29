@@ -27,10 +27,17 @@
 				<td width="*"><?php echo $form->textField($model,'realname'); ?><?php echo $form->error($model,'realname'); ?></td>
 			</tr>
 
-			<!--<tr>
-				<td width="20%" class="altbg1 right"><?php /*echo $form->labelEx($model,'gid'); */?></td>
-				<td width="*"><?php /*echo $form->dropDownList($model, 'gid' , $groupOption, array('data-placeholder'=>'请选择部门', 'style'=>'width:140px;')); */?></td>
-			</tr>-->
+			<?php if($this->isFounder(user())):?>
+			<tr>
+				<td width="20%" class="altbg1 right"><?php echo $form->labelEx($model,'gid'); ?></td>
+				<td width="*"><?php echo $form->dropDownList($model, 'gid' , $groupOption, array('data-placeholder'=>'请选择部门', 'style'=>'width:140px;')); ?></td>
+			</tr>
+
+			<tr>
+				<td width="20%" class="altbg1 right"><?php echo $form->labelEx($model,'role'); ?></td>
+				<td width="*"><?php echo $form->dropDownList($model, 'role' , $roleOption, array('data-placeholder'=>'请选择角色', 'style'=>'width:140px;')); ?></td>
+			</tr>
+			<?php endif;?>
 
 			<tr>
 				<td width="20%" class="altbg1 right"><?php echo $form->labelEx($model,'note'); ?></td>
@@ -40,10 +47,13 @@
 <center><?php echo CHtml::submitButton('Submit', array('value' => '提 交', 'class' => 'btn')); ?></center>
 <?php $this->endWidget(); ?>
 </div>
+<?php if($this->isFounder(user())):?>
 <?php Yii::app()->clientScript->registerScriptFile(Yii::app()->request->baseUrl.'/resources/js/chosen.jquery.min.js',CClientScript::POS_END); ?>
 <?php Yii::app()->clientScript->registerCssFile(Yii::app()->request->baseUrl.'/resources/css/chosen.css'); ?>
 <script type="text/javascript">
 $(function(){
 	$('#User_gid').chosen({no_results_text: "没有该部门"});
+	$('#User_role').chosen({no_results_text: "没有该角色"});
 });
 </script>
+<?php endif;?>

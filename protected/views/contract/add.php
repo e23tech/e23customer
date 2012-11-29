@@ -150,7 +150,7 @@ $(function(){
 	$('#Contract_cuid').chosen({no_results_text: "没有该客户"});
 	$('#Contract_coid').chosen({no_results_text: "没有该联系人"});
 	$('#Contract_gid').chosen({no_results_text: "没有该部门"});
-<?php if($nowUserRole != EC_USER):?>
+<?php if($nowUserRole != EC_USER && $nowUserRole != EC_DIRECTOR):?>
 	$('#Contract_uid').chosen({no_results_text: "没有该业务员"});
 <?php endif;?>
 });

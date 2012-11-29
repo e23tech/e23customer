@@ -79,6 +79,13 @@ class Controller extends CController
 		return $res;
 	}
 
+	public function getUserRole($uid = '')
+	{
+		$pk = !empty($uid) ? $uid : Yii::app()->user->id;
+		$model = User::model()->findByPk($pk);
+		return $model->role;
+	}
+
 	protected function loadModel($uid)
 	{
 		return User::model()->findByPk(intval($uid));

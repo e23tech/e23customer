@@ -3,11 +3,13 @@
 class UserController extends Controller
 {
 	private $_model;
+	protected $_roleOption;
 
 	public function init()
 	{
 		parent::init();
 		$this->defaultAction = 'list';
+		$this->_roleOption = array('' => '', EC_USER => '业务员', EC_DIRECTOR => '部门主任', EC_OPERATOR => '公司领导');
 	}
 
 	public function accessRules()
@@ -22,15 +24,15 @@ class UserController extends Controller
 					'expression' => array($this, 'isFounder'),
 				),
 				array('allow',
-					'actions' => array('list', 'view', 'edit'),
+					'actions' => array('menu', 'list', 'view', 'edit'),
 					'expression' => array($this, 'isOperator'),
 				),
 				array('allow',
-					'actions' => array('view', 'edit'),
+					'actions' => array('menu', 'view', 'edit'),
 					'expression' => array($this, 'isDirector'),
 				),
 				array('allow',
-					'actions' => array('view', 'edit'),
+					'actions' => array('menu', 'view', 'edit'),
 					'expression' => array($this, 'isSalesman'),
 				),
 				array('deny',
@@ -45,7 +47,6 @@ class UserController extends Controller
 		$model = new User();
 		$groupList = Group::model()->findAll();
 		$groupOption = CHtml::listData($groupList, 'gid', 'group');
-		$roleOption = array('' => '', EC_USER => '业务员', EC_DIRECTOR => '部门主任', EC_OPERATOR => '公司领导');
 
 		// uncomment the following code to enable ajax-based validation
 		if(isset($_POST['ajax']) && $_POST['ajax']==='user-add-form')
@@ -65,7 +66,7 @@ class UserController extends Controller
 		$this->render('add',array(
 			'model'=>$model,
 			'groupOption' => $groupOption,
-			'roleOption' => $roleOption,
+			'roleOption' => $this->_roleOption,
 		));
 	}
 
@@ -101,6 +102,7 @@ class UserController extends Controller
 		$this->render('edit',array(
 			'model'=>$model,
 			'groupOption' => $groupOption,
+			'roleOption' => $this->_roleOption,
 		));
 	}
 
