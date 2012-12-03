@@ -96,7 +96,8 @@ class UserController extends Controller
 			$model->attributes=$_POST['User'];
 			if($model->validate() && $model->save())
 			{
-				$this->redirect(url('user/list'));
+				//$this->redirect(url('user/edit'));
+				redirect('修改成功！', 'user/edit');
 			}
 		}
 		$this->render('edit',array(
@@ -109,6 +110,7 @@ class UserController extends Controller
 	public function actionList()
 	{
 		$criteria = new CDbCriteria();
+		$criteria->condition = "status = 1";
 		$criteria->order = "uid DESC";
 		$count = User::model()->count($criteria);
 

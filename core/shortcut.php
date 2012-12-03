@@ -63,3 +63,15 @@ function request()
 {
 	return Yii::app()->request;
 }
+
+/**
+ * @param $message
+ * @param $url
+ * @param int $time
+ */
+function redirect($message, $url, $time=3)
+{
+	header("refresh:".$time.";url=".url($url));
+	echo $message,'<br>正在加载，请稍等...<br>',$time,'秒后自动跳转~~~';
+	exit();
+}

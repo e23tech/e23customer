@@ -133,6 +133,10 @@ class User extends CActiveRecord
 			{
 				$this->password = $this->hashpassword($this->password, $this->salt);
 			}
+			else
+			{
+				unset($this->password);
+			}
 
 			return true;
 		}
