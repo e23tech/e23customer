@@ -27,7 +27,7 @@
 				<td width="*"><?php echo $form->textField($model,'realname'); ?><?php echo $form->error($model,'realname'); ?></td>
 			</tr>
 
-			<?php if($this->isFounder(user())):?>
+			<?php if($this->isFounder(user()) && $model->username != user()->name):?>
 			<tr>
 				<td width="20%" class="altbg1 right"><?php echo $form->labelEx($model,'gid'); ?></td>
 				<td width="*"><?php echo $form->dropDownList($model, 'gid' , $groupOption, array('data-placeholder'=>'请选择部门', 'style'=>'width:140px;')); ?></td>
