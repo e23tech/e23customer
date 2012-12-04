@@ -39,6 +39,9 @@ class QueryController extends Controller
 
 	public function actionMain()
 	{
+		$gidStr = $this->getGidStr(user());
+		if(!empty($gidStr))
+			throw new CHttpException(403,'权限不足！');
 		$moneyAll = 0;
 		$list = array();
 		if(isset($_POST['query']))
@@ -65,15 +68,7 @@ class QueryController extends Controller
 	{
 		$moneyAll = 0;
 		$list = array();
-		if($this->isDirector(user()))
-		{
-			$gid = User::model()->findByPk(user()->id)->gid;
-			$groupList = Group::model()->findAll("gid = $gid");
-		}
-		else
-		{
-			$groupList = Group::model()->findAll();
-		}
+		$groupList = Group::model()->findAll("1" . $this->getGidStr(user()));
 		$groupOption = CHtml::listData($groupList, 'gid', 'group');
 		if(isset($_POST['query']))
 		{
@@ -102,18 +97,12 @@ class QueryController extends Controller
 		$list = array();
 		if($this->isSalesman(user()))
 		{
-			$salesmanlist = User::model()->findAllByPk(Yii::app()->user->id);
-		}
-		elseif($this->isDirector(user()))
-		{
-			$gid = User::model()->findByPk(user()->id)->gid;
-			$salesmanlist = User::model()->findAll("gid = $gid");
+			$salesmanlist = User::model()->findAllByPk(user()->id);
 		}
 		else
 		{
-			$salesmanlist = User::model()->findAll("status=1 AND (role = '" . EC_USER . "' or role = '" . EC_DIRECTOR . "')");
+			$salesmanlist = User::model()->findAll("status = 1".$this->getGidStr(user()));
 		}
-		//$salesmanlist = User::model()->findAll("status=1");
 		$salesmanOptions = CHtml::listData($salesmanlist, 'uid', 'realname');
 		if(isset($_POST['query']))
 		{
@@ -138,6 +127,9 @@ class QueryController extends Controller
 
 	public function actionCustomer()
 	{
+		$gidStr = $this->getGidStr(user());
+		if(!empty($gidStr))
+			throw new CHttpException(403,'权限不足！');
 		$moneyAll = 0;
 		$list = array();
 		$customerList = Customer::model()->findAll("status=1");

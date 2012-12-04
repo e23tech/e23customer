@@ -43,6 +43,13 @@
 		</tr>
 
 		<tr>
+			<td width="20%" class="altbg1 right"><?php echo $form->labelEx($model,'scope'); ?></td>
+			<td width="*">
+				<?php echo $form->dropDownList($model, 'scope', $scopeOption, array('data-placeholder'=>'请选择部门', 'multiple' => 'multiple', 'style'=>'width:140px;')); ?>
+			</td>
+		</tr>
+
+		<tr>
 			<td width="20%" class="altbg1 right"><?php echo $form->labelEx($model,'note'); ?></td>
 			<td width="*"><?php echo $form->textArea($model,'note', array('rows' => '5')); ?><?php echo $form->error($model,'note'); ?></td>
 		</tr>
@@ -56,5 +63,6 @@
 $(function(){
 	$('#User_gid').chosen({no_results_text: "没有该部门"});
 	$('#User_role').chosen({no_results_text: "没有该角色"});
+	$('#User_scope').chosen({no_results_text: "没有该角色"});
 });
 </script>

@@ -130,14 +130,7 @@ class ContractController extends Controller
 	{
 		$criteria = new CDbCriteria();
 		$criteria->order = "cid DESC";
-		if($this->isDirector(user()))
-		{
-			$criteria->condition = "status = 1 AND uid IN(" . implode(',', $this->getGroupUids(user())) . ")";
-		}
-		else
-		{
-			$criteria->condition = "status = 1";
-		}
+		$criteria->condition = "status = 1" . $this->getGidStr(user());
 		$count = Contract::model()->count($criteria);
 
 		$pager = new CPagination($count);

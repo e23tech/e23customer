@@ -1,33 +1,13 @@
 <?php
-/**
- * Controller is the customized base controller class.
- * All controller classes for this application should extend from this base class.
- */
 class Controller extends CController
 {
-	/**
-	 * @var string the default layout for the controller view. Defaults to '//layouts/column1',
-	 * meaning using a single column layout. See 'protected/views/layouts/column1.php'.
-	 */
 	public $layout='//layouts/common';
-	/**
-	 * @var array context menu items. This property will be assigned to {@link CMenu::items}.
-	 */
 	public $menu=array();
-	/**
-	 * @var array the breadcrumbs of the current page. The value of this property will
-	 * be assigned to {@link CBreadcrumbs::links}. Please refer to {@link CBreadcrumbs::links}
-	 * for more details on how to specify this property.
-	 */
 	public $breadcrumbs=array();
-
-	public $ecUser = array();
 
 	public function init()
 	{
 		parent::init();
-		if(!Yii::app()->user->isGuest)
-			$this->ecUser = User::model()->findByPk(user()->id);
 	}
 
 	public function beforeAction($action)
@@ -68,15 +48,41 @@ class Controller extends CController
 		return array('login');
 	}
 
-	protected function getGroupUids($user)
+	protected function getGidStr($user)
 	{
-		$gid = User::model()->findByPk($user->id)->gid;
-		$groupUsers = User::model()->findAll("gid = '$gid' AND status = '1'");
-		foreach($groupUsers as $val)
+		if($this->isFounder($user))
 		{
-			$res[] = $val['uid'];
+			return;
 		}
-		return $res;
+		if($this->isSalesman($user))
+		{
+			throw new CHttpException(403,'权限不足！');
+		}
+		if($this->isDirector($user))
+		{
+			$gid = User::model()->findByPk($user->id)->gid;
+		}
+		$scope = User::model()->findByPk($user->id)->scope;
+		if(empty($scope))
+		{
+			if($this->isOperator($user))
+				return;
+			else
+				throw new CHttpException(403,'权限不足！');
+		}
+		else
+		{
+			$scope = unserialize($scope);
+			$res = isset($gid) ? strval($gid) : '';
+			if(!empty($scope))
+			{
+				foreach($scope as $val)
+				{
+					$res .= empty($res) ? $val : ', ' . $val;
+				}
+			}
+			return " AND gid IN (" . $res . ")";
+		}
 	}
 
 	public function getUserRole($uid = '')

@@ -13,6 +13,7 @@
  * @property integer $status
  * @property integer $role
  * @property string $note
+ * @property string $scope
  */
 class User extends CActiveRecord
 {
@@ -46,10 +47,12 @@ class User extends CActiveRecord
 			array('gid, status, role', 'numerical', 'integerOnly'=>true),
 			array('username, realname', 'length', 'max'=>20),
 			array('password', 'length', 'max'=>32),
+			array('salt', 'length', 'max'=>6),
 			array('note', 'length', 'max'=>500),
+			array('scope', 'length', 'max'=>200),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('uid, username, password, salt, realname, gid, status, role, note', 'safe', 'on'=>'search'),
+			array('uid, username, realname, gid, status, role', 'safe', 'on'=>'search'),
 			array('username', 'unique'),
 		);
 	}
@@ -81,6 +84,7 @@ class User extends CActiveRecord
 			'status' => '状态',
 			'role' => '角色',
 			'note' => '备注',
+			'scope' => '管理范围',
 		);
 	}
 
@@ -104,6 +108,7 @@ class User extends CActiveRecord
 		$criteria->compare('status',$this->status);
 		$criteria->compare('role',$this->role);
 		$criteria->compare('note',$this->note,true);
+		$criteria->compare('scope',$this->scope,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

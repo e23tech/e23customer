@@ -58,6 +58,7 @@ class UserController extends Controller
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
+			$model->scope = empty($_POST['User']['scope']) ? NULL : serialize($model->scope);
 			if($model->validate() && $model->save())
 			{
 				$this->redirect(url('user/list'));
@@ -67,6 +68,7 @@ class UserController extends Controller
 			'model'=>$model,
 			'groupOption' => $groupOption,
 			'roleOption' => $this->_roleOption,
+			'scopeOption' => $groupOption,
 		));
 	}
 
@@ -81,6 +83,7 @@ class UserController extends Controller
 	public function actionEdit()
 	{
 		$model = $this->_loadModel();
+		$model->scope = unserialize($model->scope);
 		$groupList = Group::model()->findAll();
 		$groupOption = CHtml::listData($groupList, 'gid', 'group');
 		// uncomment the following code to enable ajax-based validation
@@ -94,15 +97,17 @@ class UserController extends Controller
 		{
 			if(empty($_POST['User']['password'])) unset($_POST['User']['password']);
 			$model->attributes=$_POST['User'];
+			$model->scope = empty($_POST['User']['scope']) ? NULL : serialize($model->scope);
 			if($model->validate() && $model->save())
 			{
 				//$this->redirect(url('user/edit'));
-				redirect('修改成功！', 'user/edit');
+				redirect('修改成功！', 'user/edit/uid/'.$model->uid);
 			}
 		}
 		$this->render('edit',array(
 			'model'=>$model,
 			'groupOption' => $groupOption,
+			'scopeOption' => $groupOption,
 			'roleOption' => $this->_roleOption,
 		));
 	}
