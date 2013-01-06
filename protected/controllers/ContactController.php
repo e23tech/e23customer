@@ -22,7 +22,7 @@ class ContactController extends Controller
 					'expression' => array($this, 'isFounder'),
 				),
 				array('allow',
-					'actions' => array('menu', 'list', 'view'),
+					'actions' => array('add', 'menu', 'list', 'view'),
 					'expression' => array($this, 'isOperator'),
 				),
 				array('allow',

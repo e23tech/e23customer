@@ -56,7 +56,8 @@ class Controller extends CController
 		}
 		if($this->isSalesman($user))
 		{
-			throw new CHttpException(403,'权限不足！');
+            return " AND uid = " . $user->id;
+			//throw new CHttpException(403,'权限不足！');
 		}
 		if($this->isDirector($user))
 		{

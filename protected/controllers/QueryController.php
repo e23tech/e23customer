@@ -178,14 +178,13 @@ class QueryController extends Controller
 			echo 'false';
 	}
 
-	protected function yearList($select = 2012, $start = 2007, $end = 2012)
+	protected function yearList()
 	{
 		$res = array();
 		$thisyear = date('Y', time());
-		$end = isset($end) ? $end : $thisyear;
-		$select = isset($select) ? $select : $thisyear;
+		$end = $select = $thisyear;
 		$res['select'] = $select;
-		$start = isset($start) ? $start : ($end - 5);
+		$start = $end - 5;
 		for($i = $start; $i <= $end; $i++ )
 		{
 			$res['list'][$i] = $i;
@@ -248,6 +247,7 @@ class QueryController extends Controller
 		{
 			$res .= " AND cuid = '" . $arr['customer'] . "'";
 		}
+        $res .= " AND status = 1";
 		return $res;
 	}
 }

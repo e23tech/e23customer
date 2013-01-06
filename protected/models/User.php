@@ -154,6 +154,13 @@ class User extends CActiveRecord
 		$model = User::model()->findByPk($uid);
 		$oldpwd = $model->password;
 		$newpwd = $this->hashpassword($this->password, $this->salt);
-		return $oldpwd == $newpwd ? false : true;
+        if($oldpwd == $this->password || $oldpwd == $newpwd)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
 	}
 }
