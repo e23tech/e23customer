@@ -18,14 +18,18 @@
 			</td>
 		</tr>
 		<?php endforeach;?>
-		<?php $this->widget('CLinkPager',array(
-		'header'=>'',
-		'firstPageLabel' => '首页',
-		'lastPageLabel' => '末页',
-		'prevPageLabel' => '上一页',
-		'nextPageLabel' => '下一页',
-		'pages' => $pages,
-		'maxButtonCount'=>13
-	));?>
+        <tr class="altbg1">
+			<td colspan="4" align="center">
+                <?php $this->widget('CLinkPager',array(
+                'header'=>'',
+                'firstPageLabel' => '首页',
+                'lastPageLabel' => '末页',
+                'prevPageLabel' => '上一页',
+                'nextPageLabel' => '下一页',
+                'pages' => $pages,
+                'maxButtonCount'=>13
+            ));?>
+            </td>
+		</tr>
 	</table>
 </div>
