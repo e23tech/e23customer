@@ -4,7 +4,7 @@
 		<tr class="altbg1">
 			<td width="45" align="center">ID</td>
 			<td width="100">合同号</td>
-			<td width="150">客户</td>
+			<td width="150">客户名称</td>
 			<td width="100">联系人</td>
 			<td width="100">业务员</td>
 			<td width="100">合同金额(元)</td>
@@ -16,8 +16,8 @@
 		<tr>
 			<td align="center"><?php echo $contract['cid']; ?></td>
 			<td><?php echo $contract['contractno']; ?></td>
-			<td><?php echo $contract->customer['customer']; ?></td>
-			<td><?php echo $contract->contact['contact']; ?></td>
+			<td><?php echo $contract['customer']; ?></td>
+			<td><?php echo $contract['contact']; ?></td>
 			<td><?php echo $contract->salesman['realname']; ?></td>
 			<td><?php echo $contract['money']; ?></td>
 			<td><?php echo $contract['datestart']; ?> 至 <?php echo $contract['dateend']; ?></td>

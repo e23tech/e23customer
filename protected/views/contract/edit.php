@@ -12,12 +12,9 @@
                 <td width="*"><?php echo $form->textField($model,'contractno'); ?><?php echo $form->error($model,'contractno'); ?></td>
             </tr>
 
-<tr>
-				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'cuid'); ?></td>
-				<td>
-					<?php echo $form->dropDownList($model, 'cuid' , $cuidList, array('data-placeholder'=>'请选择合同客户', 'style'=>'width:140px;')); ?>
-					<a href="<?php echo url('customer/add');?>">添加新客户</a>
-				</td>
+            <tr>
+				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'customer'); ?></td>
+				<td><?php echo $form->textField($model,'customer'); ?><?php echo $form->error($model,'customer'); ?></td>
 			</tr>
 
 			<tr>
@@ -46,11 +43,18 @@
 			</tr>
 
 			<tr>
-				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'coid'); ?></td>
-				<td>
-					<?php echo $form->dropDownList($model, 'coid' , $coidList, array('data-placeholder'=>'请选择合同联系人', 'style'=>'width:140px;')); ?>
-					<a href="<?php echo url('contact/add');?>">添加新联系人</a>
-				</td>
+				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'contact'); ?></td>
+				<td><?php echo $form->textField($model, 'contact'); ?><?php echo $form->error($model, 'contact'); ?></td>
+			</tr>
+
+			<tr>
+				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'contact_phone'); ?></td>
+				<td><?php echo $form->textField($model, 'contact_phone'); ?><?php echo $form->error($model, 'contact_phone'); ?></td>
+			</tr>
+
+			<tr>
+				<td class="altbg1 right" valign="top"><?php echo $form->labelEx($model, 'contact_email'); ?></td>
+				<td><?php echo $form->textField($model, 'contact_email'); ?><?php echo $form->error($model, 'contact_email'); ?></td>
 			</tr>
 
 			<tr>

@@ -7,8 +7,8 @@
 		</tr>
 
 		<tr>
-			<td class="altbg1 right" valign="top"><?php echo CHtml::activeLabel($model, 'cuid'); ?></td>
-			<td><?php echo $model->customer['customer']; ?></td>
+			<td class="altbg1 right" valign="top"><?php echo CHtml::activeLabel($model, 'customer'); ?></td>
+			<td><?php echo $model['customer']; ?></td>
 		</tr>
 
 		<tr>
@@ -22,8 +22,8 @@
 		</tr>
 
 		<tr>
-			<td class="altbg1 right" valign="top"><?php echo CHtml::activeLabel($model, 'coid'); ?></td>
-			<td><?php echo $model->contact['contact']; ?></td>
+			<td class="altbg1 right" valign="top"><?php echo CHtml::activeLabel($model, 'contact'); ?></td>
+			<td><?php echo $model['contact']; ?></td>
 		</tr>
 
 		<tr>

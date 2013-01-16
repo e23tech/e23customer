@@ -60,18 +60,13 @@ class ContractController extends Controller
 			}
 		}
 
-		$customer = Customer::model()->findAll("status = 1");
-		$cuidList = CMap::mergeArray(array('' => ''), CHtml::listData($customer, 'cuid', 'customer'));
-		$contact = Contact::model()->findAll("status = 1");
-		$coidList = CMap::mergeArray(array('' => ''), CHtml::listData($contact, 'coid', 'contact'));
 		$group = Group::model()->findAll();
 		$gidList = CMap::mergeArray(array('' => ''), CHtml::listData($group, 'gid', 'group'));
 		$user = User::model()->findAll("status = 1");
 		$uidList = CMap::mergeArray(array('' => ''), CHtml::listData($user, 'uid', 'realname'));
-		$this->render('add',array(
+
+        $this->render('add',array(
 			'model'=>$model,
-			'cuidList' => $cuidList,
-			'coidList' => $coidList,
 			'gidList' => $gidList,
 			'uidList' => $uidList,
 			'nowUserRole' => $this->getUserRole(),
@@ -107,10 +102,6 @@ class ContractController extends Controller
 			}
 		}
 
-		$customer = Customer::model()->findAll("status = 1");
-		$cuidList = CMap::mergeArray(array('' => ''), CHtml::listData($customer, 'cuid', 'customer'));
-		$contact = Contact::model()->findAll("status = 1");
-		$coidList = CMap::mergeArray(array('' => ''), CHtml::listData($contact, 'coid', 'contact'));
 		$group = Group::model()->findAll();
 		$gidList = CMap::mergeArray(array('' => ''), CHtml::listData($group, 'gid', 'group'));
 		$user = User::model()->findAll("status = 1");
@@ -118,13 +109,10 @@ class ContractController extends Controller
 		$nowUserRole = $this->getUserRole(Yii::app()->user->id);
 		$this->render('edit',array(
 			'model'=>$model,
-			'cuidList' => $cuidList,
-			'coidList' => $coidList,
 			'gidList' => $gidList,
 			'uidList' => $uidList,
 			'nowUserRole' => $nowUserRole,
-		));
-	}
+		));	}
 
 	public function actionList()
 	{

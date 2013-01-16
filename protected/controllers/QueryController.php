@@ -132,8 +132,8 @@ class QueryController extends Controller
 			throw new CHttpException(403,'权限不足！');
 		$moneyAll = 0;
 		$list = array();
-		$customerList = Customer::model()->findAll("status=1");
-		$customerOption = CHtml::listData($customerList, 'cuid', 'customer');
+		$customerList = Contract::model()->findAll("status=1");
+		$customerOption = CHtml::listData($customerList, 'customer', 'customer');
 		if(isset($_POST['query']))
 		{
 			$criteria = new CDbCriteria();
@@ -235,17 +235,13 @@ class QueryController extends Controller
 		}
 		elseif(!empty($arr['group']))
 		{
-			$salesmanlist = User::model()->findAll("status = 1 AND gid = '" . $arr['group'] . "'");
-			foreach($salesmanlist as $val)
-			{
-				$salesmanstr .= empty($salesmanstr) ? "'" . $val['uid'] . "'" : ", '" . $val['uid'] . "'";
-			}
+			$res .= " AND gid = '" . $arr['group'] . "'";
 		}
 		if(!empty($salesmanstr)) $res .= " AND uid IN (" . $salesmanstr . ")";
 
 		if($arr['customer'])
 		{
-			$res .= " AND cuid = '" . $arr['customer'] . "'";
+			$res .= " AND customer = '" . $arr['customer'] . "'";
 		}
         $res .= " AND status = 1";
 		return $res;

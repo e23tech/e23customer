@@ -56,7 +56,6 @@ function admin_refresh() {
     <ul id="menu">
     <li class="selected"><a href="#" onclick="return gotoMenu(this,'site');" onfocus="this.blur()">后台首页</a></li>
 	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'contract');" onfocus="this.blur()">合同管理</a></li>
-	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'customer');" onfocus="this.blur()">客户管理</a></li>
 	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'query');" onfocus="this.blur()">查询分析</a></li>
 	<li class="unselected"><a href="#" onclick="return gotoMenu(this,'user');" onfocus="this.blur()">用户管理</a></li>
     </ul>
